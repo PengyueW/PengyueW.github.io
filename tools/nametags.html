@@ -200,7 +200,7 @@
     document.getElementById('nameCustomFont').onchange = e => { if (e.target.files[0]) loadCustomFont('name', e.target.files[0]); };
     document.getElementById('orgCustomFont').onchange  = e => { if (e.target.files[0]) loadCustomFont('org',  e.target.files[0]); };
 
-    // --- Text wrapping (max 2 lines, split at word boundary) ---
+    // --- Text wrapping (greedy, unlimited lines) ---
 
     function wrapText(text, maxWidth, fontStr) {
         ctx.font = fontStr;
@@ -209,16 +209,19 @@
         const words = text.split(' ');
         if (words.length === 1) return [text];
 
-        // Find the largest prefix that fits on line 1
-        let splitAt = 1;
+        const lines = [];
+        let current = words[0];
         for (let i = 1; i < words.length; i++) {
-            if (ctx.measureText(words.slice(0, i + 1).join(' ')).width <= maxWidth) {
-                splitAt = i + 1;
+            const candidate = current + ' ' + words[i];
+            if (ctx.measureText(candidate).width <= maxWidth) {
+                current = candidate;
             } else {
-                break;
+                lines.push(current);
+                current = words[i];
             }
         }
-        return [words.slice(0, splitAt).join(' '), words.slice(splitAt).join(' ')];
+        lines.push(current);
+        return lines;
     }
 
     // --- Box geometry ---
@@ -230,12 +233,10 @@
         const ascent   = fontSize * 0.85;
         const descent  = fontSize * 0.25;
         const lineH    = fontSize * 1.3;
-        // Box always reserves 2 rows; el.y is the vertical center of the box
-        const boxHeight = ascent + descent + lineH;
-        const boxTop    = el.y - boxHeight / 2;
-        // Center the actual text block (1 or 2 lines) within the fixed 2-row box
-        const textBlockHeight = ascent + descent + (lines.length - 1) * lineH;
-        const firstBaseline   = boxTop + (boxHeight - textBlockHeight) / 2 + ascent;
+        // Box fits exactly the number of lines needed; el.y is the vertical center
+        const boxHeight     = ascent + descent + (lines.length - 1) * lineH;
+        const boxTop        = el.y - boxHeight / 2;
+        const firstBaseline = boxTop + ascent;
         return {
             fontStr, lines, fontSize, lineH,
             boxLeft: el.x - el.boxWidth / 2,
