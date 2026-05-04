@@ -6,6 +6,7 @@
     <title>Bulk Name Tag Generator</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         #previewContainer {
             position: relative;
@@ -22,14 +23,12 @@
         .style-group.org { border-left-color: #6c757d; }
         h6 { font-weight: bold; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; color: #495057; }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
 <body class="bg-light">
 
 <div class="container py-5">
     <h2 class="mb-4">Bulk Name Tag Generator</h2>
-    
+
     <div class="row g-4">
         <div class="col-lg-4">
             <div class="control-panel shadow-sm">
@@ -39,13 +38,13 @@
                     <input type="file" id="templateInput" class="form-control" accept="image/*">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Excel Data (Headers: Name, Org)</label>
-                    <input type="file" id="excelInput" class="form-control" accept=".xlsx, .xls">
+                    <label class="form-label">Excel / CSV Data (Headers: Name, Org)</label>
+                    <input type="file" id="excelInput" class="form-control" accept=".xlsx, .xls, .csv">
                 </div>
 
                 <hr>
                 <h5>2. Customize Styles</h5>
-                
+
                 <div class="style-group">
                     <h6>Guest Name</h6>
                     <div class="row g-2">
@@ -67,6 +66,10 @@
                                 <option value="Georgia">Georgia</option>
                                 <option value="Impact">Impact</option>
                             </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="small">Custom Font File</label>
+                            <input type="file" id="nameCustomFont" class="form-control form-control-sm" accept=".ttf,.otf,.woff,.woff2">
                         </div>
                     </div>
                 </div>
@@ -93,15 +96,19 @@
                                 <option value="Impact">Impact</option>
                             </select>
                         </div>
+                        <div class="col-12">
+                            <label class="small">Custom Font File</label>
+                            <input type="file" id="orgCustomFont" class="form-control form-control-sm" accept=".ttf,.otf,.woff,.woff2">
+                        </div>
                     </div>
                 </div>
 
                 <div class="alert alert-info small">
-                    <strong>Tip:</strong> Click on the image and drag the text aroundto set positions. 
+                    <strong>Tip:</strong> Drag text to reposition. Drag the side handles on the preview boxes to resize the text area — text wraps to 2 lines automatically if it doesn't fit.
                 </div>
 
-                <button id="downloadBtn" class="btn btn-primary w-100 mt-2" disabled>Generate & Download All</button>
-                <p class="text-muted small mt-2">*Note: Browser will prompt for multiple downloads if JSZip is not used.</p>
+                <button id="downloadBtn" class="btn btn-primary w-100 mt-2" disabled>Generate &amp; Download All</button>
+                <p class="text-muted small mt-2">*Images saved as PNG in a ZIP file.</p>
             </div>
         </div>
 
@@ -109,7 +116,7 @@
             <div class="card shadow-sm">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <strong>Live Preview</strong>
-                    <span class="badge bg-info text-dark">Drag text to reposition</span>
+                    <span class="badge bg-info text-dark">Drag text · Drag side handles to resize box</span>
                 </div>
                 <div class="card-body text-center p-0">
                     <div id="previewContainer">
@@ -123,198 +130,339 @@
 
 <script>
     const canvas = document.getElementById('tagCanvas');
-    const ctx = canvas.getContext('2d', { alpha: false }); // Optimized context
-    
+    const ctx = canvas.getContext('2d', { alpha: false });
+
     let templateImg = new Image();
     let userData = [];
-    
-    // State for dragging
+
+    // Handle size in screen pixels (scaled to canvas coords via getDisplayScale)
+    const HANDLE_PX = 10;
+
     let elements = {
-        name: { x: 200, y: 150, text: "GUEST NAME", width: 0, height: 0 },
-        org: { x: 200, y: 220, text: "ORGANISATION", width: 0, height: 0 }
+        name: { x: 200, y: 150, text: 'GUEST NAME',   boxWidth: 300 },
+        org:  { x: 200, y: 220, text: 'ORGANISATION', boxWidth: 300 }
     };
-    let dragTarget = null;
-    let isDragging = false;
-    let offset = { x: 0, y: 0 };
 
-    // --- Initialization & Listeners ---
+    // null | { mode:'move',   target, offX, offY }
+    //      | { mode:'resize', target }
+    let interaction = null;
 
-    templateInput.onchange = (e) => {
+    // Normalize text from XLSX: NFC composition fixes combining-accent rendering on canvas,
+    // toLocaleUpperCase handles locale-specific cases (e.g. Turkish dotted-I)
+    function normalizeText(str) {
+        return str.normalize('NFC').toLocaleUpperCase();
+    }
+
+    // --- Scale / coordinate helpers ---
+
+    function getDisplayScale() {
+        const w = canvas.getBoundingClientRect().width;
+        return w > 0 ? canvas.width / w : 1;
+    }
+
+    function getMousePos(e) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+            x: (e.clientX - rect.left) * (canvas.width  / rect.width),
+            y: (e.clientY - rect.top)  * (canvas.height / rect.height)
+        };
+    }
+
+    // --- Font helpers ---
+
+    function getFontStr(type) {
+        const size   = parseInt(document.getElementById(type + 'Size').value) || 40;
+        const family = document.getElementById(type + 'Font').value;
+        return `${size}px "${family}"`;
+    }
+
+    async function loadCustomFont(type, file) {
+        const url    = URL.createObjectURL(file);
+        const family = `CustomFont_${type}`;
+        try {
+            const face = new FontFace(family, `url(${url})`);
+            await face.load();
+            document.fonts.add(face);
+        } catch (err) {
+            console.warn('Font load error:', err);
+            return;
+        }
+        const sel      = document.getElementById(type + 'Font');
+        const existing = sel.querySelector('[data-custom]');
+        if (existing) existing.remove();
+        const opt = new Option(`Custom (${file.name})`, family);
+        opt.dataset.custom = '1';
+        sel.appendChild(opt);
+        sel.value = family;
+        updatePreview();
+    }
+
+    document.getElementById('nameCustomFont').onchange = e => { if (e.target.files[0]) loadCustomFont('name', e.target.files[0]); };
+    document.getElementById('orgCustomFont').onchange  = e => { if (e.target.files[0]) loadCustomFont('org',  e.target.files[0]); };
+
+    // --- Text wrapping (max 2 lines, split at word boundary) ---
+
+    function wrapText(text, maxWidth, fontStr) {
+        ctx.font = fontStr;
+        if (ctx.measureText(text).width <= maxWidth) return [text];
+
+        const words = text.split(' ');
+        if (words.length === 1) return [text];
+
+        // Find the largest prefix that fits on line 1
+        let splitAt = 1;
+        for (let i = 1; i < words.length; i++) {
+            if (ctx.measureText(words.slice(0, i + 1).join(' ')).width <= maxWidth) {
+                splitAt = i + 1;
+            } else {
+                break;
+            }
+        }
+        return [words.slice(0, splitAt).join(' '), words.slice(splitAt).join(' ')];
+    }
+
+    // --- Box geometry ---
+
+    function getBoxInfo(el, type) {
+        const fontSize = parseInt(document.getElementById(type + 'Size').value) || 40;
+        const fontStr  = getFontStr(type);
+        const lines    = wrapText(el.text, el.boxWidth, fontStr);
+        const ascent   = fontSize * 0.85;
+        const descent  = fontSize * 0.25;
+        const lineH    = fontSize * 1.3;
+        // Box always reserves 2 rows; el.y is the vertical center of the box
+        const boxHeight = ascent + descent + lineH;
+        const boxTop    = el.y - boxHeight / 2;
+        // Center the actual text block (1 or 2 lines) within the fixed 2-row box
+        const textBlockHeight = ascent + descent + (lines.length - 1) * lineH;
+        const firstBaseline   = boxTop + (boxHeight - textBlockHeight) / 2 + ascent;
+        return {
+            fontStr, lines, fontSize, lineH,
+            boxLeft: el.x - el.boxWidth / 2,
+            boxTop, boxWidth: el.boxWidth, boxHeight,
+            firstBaseline
+        };
+    }
+
+    function getHandleRects(el, info) {
+        const hs   = HANDLE_PX * getDisplayScale();
+        const midY = info.boxTop + info.boxHeight / 2 - hs / 2;
+        return {
+            left:  { x: info.boxLeft                    - hs / 2, y: midY, w: hs, h: hs },
+            right: { x: info.boxLeft + info.boxWidth    - hs / 2, y: midY, w: hs, h: hs }
+        };
+    }
+
+    function hitRect(pos, r) {
+        return pos.x >= r.x && pos.x <= r.x + r.w &&
+               pos.y >= r.y && pos.y <= r.y + r.h;
+    }
+
+    function isOverBox(pos, el, type) {
+        const info = getBoxInfo(el, type);
+        return pos.x >= info.boxLeft                 && pos.x <= info.boxLeft + info.boxWidth &&
+               pos.y >= info.boxTop                  && pos.y <= info.boxTop  + info.boxHeight;
+    }
+
+    function getCursorForPos(pos) {
+        for (const type of ['name', 'org']) {
+            const el   = elements[type];
+            const info = getBoxInfo(el, type);
+            const hh   = getHandleRects(el, info);
+            if (hitRect(pos, hh.left) || hitRect(pos, hh.right)) return 'ew-resize';
+            if (isOverBox(pos, el, type)) return 'move';
+        }
+        return 'default';
+    }
+
+    // --- Asset loading ---
+
+    document.getElementById('templateInput').onchange = e => {
         const reader = new FileReader();
-        reader.onload = (event) => {
+        reader.onload = ev => {
             templateImg.onload = () => {
-                canvas.width = templateImg.width;
+                canvas.width  = templateImg.width;
                 canvas.height = templateImg.height;
-                // Center elements initially
-                elements.name.x = canvas.width / 2;
-                elements.org.x = canvas.width / 2;
+                elements.name.x = elements.org.x = canvas.width / 2;
+                elements.name.y = Math.round(canvas.height * 0.42);
+                elements.org.y  = Math.round(canvas.height * 0.57);
+                elements.name.boxWidth = elements.org.boxWidth = Math.round(canvas.width * 0.7);
                 updatePreview();
             };
-            templateImg.src = event.target.result;
+            templateImg.src = ev.target.result;
         };
         reader.readAsDataURL(e.target.files[0]);
     };
 
-    excelInput.onchange = (e) => {
+    document.getElementById('excelInput').onchange = e => {
+        const file   = e.target.files[0];
+        const isCSV  = file.name.toLowerCase().endsWith('.csv');
         const reader = new FileReader();
-        reader.onload = (event) => {
-            const data = new Uint8Array(event.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
-            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-            userData = XLSX.utils.sheet_to_json(firstSheet);
-            if(userData.length > 0) {
+
+        reader.onload = ev => {
+            // CSV is read as UTF-8 text (preserves accents); xlsx/xls as binary array
+            const wb = isCSV
+                ? XLSX.read(ev.target.result, { type: 'string' })
+                : XLSX.read(new Uint8Array(ev.target.result), { type: 'array' });
+            userData = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+            if (userData.length) {
                 document.getElementById('downloadBtn').disabled = false;
-                elements.name.text = (userData[0].Name || userData[0].name || "Guest").toUpperCase();
-                elements.org.text = (userData[0].Organisation || userData[0].organisation || userData[0].Org || "Company").toUpperCase();
+                elements.name.text = normalizeText(userData[0].Name || userData[0].name || 'Guest');
+                elements.org.text  = normalizeText(userData[0].Organisation || userData[0].organisation || userData[0].Org || 'Company');
                 updatePreview();
             }
         };
-        reader.readAsArrayBuffer(e.target.files[0]);
-    };
 
-    // --- Drag Logic ---
-
-    function getMousePos(e) {
-        const rect = canvas.getBoundingClientRect();
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-        return {
-            x: (e.clientX - rect.left) * scaleX,
-            y: (e.clientY - rect.top) * scaleY
-        };
-    }
-
-    function isOverElement(mousePos, el, type) {
-        const fontSize = parseInt(document.getElementById(type + 'Size').value);
-        // Approximation of text box for hit testing
-        const width = el.width || 200; 
-        const height = fontSize;
-        return mousePos.x > el.x - width/2 && mousePos.x < el.x + width/2 &&
-               mousePos.y > el.y - height && mousePos.y < el.y + 10;
-    }
-
-    canvas.onmousedown = (e) => {
-        const mousePos = getMousePos(e);
-        if (isOverElement(mousePos, elements.name, 'name')) {
-            dragTarget = 'name';
-            isDragging = true;
-        } else if (isOverElement(mousePos, elements.org, 'org')) {
-            dragTarget = 'org';
-            isDragging = true;
-        }
-        if (isDragging) {
-            offset.x = mousePos.x - elements[dragTarget].x;
-            offset.y = mousePos.y - elements[dragTarget].y;
+        if (isCSV) {
+            reader.readAsText(file, 'UTF-8');
+        } else {
+            reader.readAsArrayBuffer(file);
         }
     };
 
-    window.onmousemove = (e) => {
-        const mousePos = getMousePos(e);
-        
-        // Change cursor style
-        if (!isDragging) {
-            if (isOverElement(mousePos, elements.name, 'name') || isOverElement(mousePos, elements.org, 'org')) {
-                canvas.style.cursor = 'move';
-            } else {
-                canvas.style.cursor = 'default';
+    // --- Mouse interaction ---
+
+    canvas.onmousedown = e => {
+        const pos = getMousePos(e);
+
+        // Check resize handles first (smaller target, higher priority)
+        for (const type of ['name', 'org']) {
+            const el   = elements[type];
+            const info = getBoxInfo(el, type);
+            const hh   = getHandleRects(el, info);
+            if (hitRect(pos, hh.left) || hitRect(pos, hh.right)) {
+                interaction = { mode: 'resize', target: type };
+                return;
             }
         }
 
-        if (isDragging && dragTarget) {
-            elements[dragTarget].x = mousePos.x - offset.x;
-            elements[dragTarget].y = mousePos.y - offset.y;
-            // Use requestAnimationFrame for buttery smooth updates
-            requestAnimationFrame(updatePreview);
+        // Then check text box for drag-to-move
+        for (const type of ['name', 'org']) {
+            if (isOverBox(pos, elements[type], type)) {
+                const el = elements[type];
+                interaction = { mode: 'move', target: type, offX: pos.x - el.x, offY: pos.y - el.y };
+                return;
+            }
         }
     };
 
-    window.onmouseup = () => {
-        isDragging = false;
-        dragTarget = null;
+    window.onmousemove = e => {
+        const pos = getMousePos(e);
+
+        if (!interaction) {
+            canvas.style.cursor = getCursorForPos(pos);
+            return;
+        }
+
+        if (interaction.mode === 'move') {
+            const el = elements[interaction.target];
+            el.x = pos.x - interaction.offX;
+            el.y = pos.y - interaction.offY;
+        } else if (interaction.mode === 'resize') {
+            const el = elements[interaction.target];
+            // Box is centered on el.x, so both handles symmetrically set width
+            el.boxWidth = Math.max(50, 2 * Math.abs(pos.x - el.x));
+        }
+
+        requestAnimationFrame(() => updatePreview());
     };
+
+    window.onmouseup = () => { interaction = null; };
 
     // --- Rendering ---
 
-    function updatePreview() {
-        if (!templateImg.src) return;
-
-        // Draw Background
-        ctx.drawImage(templateImg, 0, 0);
-
-        // Draw Name
-        const nSize = document.getElementById('nameSize').value;
-        const nColor = document.getElementById('nameColor').value;
-        const nFont = document.getElementById('nameFont').value;
-        ctx.fillStyle = nColor;
-        ctx.font = `${nSize}px ${nFont}`;
-        ctx.textAlign = "center";
-        ctx.fillText(elements.name.text, elements.name.x, elements.name.y);
-        elements.name.width = ctx.measureText(elements.name.text).width;
-
-        // Draw Org
-        const oSize = document.getElementById('orgSize').value;
-        const oColor = document.getElementById('orgColor').value;
-        const oFont = document.getElementById('orgFont').value;
-        ctx.fillStyle = oColor;
-        ctx.font = `${oSize}px ${oFont}`;
-        ctx.textAlign = "center";
-        ctx.fillText(elements.org.text, elements.org.x, elements.org.y);
-        elements.org.width = ctx.measureText(elements.org.text).width;
+    function drawElementText(el, type) {
+        const info = getBoxInfo(el, type);
+        ctx.fillStyle = document.getElementById(type + 'Color').value;
+        ctx.font      = info.fontStr;
+        ctx.textAlign = 'center';
+        info.lines.forEach((line, i) => {
+            ctx.fillText(line, el.x, info.firstBaseline + i * info.lineH);
+        });
     }
 
-    // Bind all inputs to update preview instantly
-    document.querySelectorAll('input, select').forEach(input => {
-        input.addEventListener('input', updatePreview);
+    function drawElementBox(el, type) {
+        const info  = getBoxInfo(el, type);
+        const hh    = getHandleRects(el, info);
+        const scale = getDisplayScale();
+        const color = type === 'name' ? '#1a6ef5' : '#555555';
+
+        ctx.save();
+
+        // Dashed bounding box
+        ctx.setLineDash([6 * scale, 4 * scale]);
+        ctx.strokeStyle = color + 'bb';
+        ctx.lineWidth   = 1.5 * scale;
+        ctx.strokeRect(info.boxLeft, info.boxTop, info.boxWidth, info.boxHeight);
+
+        // Small label above top-left corner
+        ctx.setLineDash([]);
+        ctx.fillStyle = color + 'cc';
+        ctx.font      = `bold ${11 * scale}px Arial`;
+        ctx.textAlign = 'left';
+        ctx.fillText(type === 'name' ? 'Name' : 'Org', info.boxLeft, info.boxTop - 3 * scale);
+
+        // Resize handles (filled squares with white border)
+        [hh.left, hh.right].forEach(h => {
+            ctx.fillStyle   = color;
+            ctx.fillRect(h.x, h.y, h.w, h.h);
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth   = scale;
+            ctx.strokeRect(h.x, h.y, h.w, h.h);
+        });
+
+        ctx.restore();
+    }
+
+    function updatePreview(forExport = false) {
+        if (!templateImg.complete || !templateImg.naturalWidth) return;
+        ctx.drawImage(templateImg, 0, 0);
+        drawElementText(elements.name, 'name');
+        drawElementText(elements.org,  'org');
+        if (!forExport) {
+            drawElementBox(elements.name, 'name');
+            drawElementBox(elements.org,  'org');
+        }
+    }
+
+    // Bind style controls (exclude file inputs) to live-update the preview
+    document.querySelectorAll('input:not([type="file"]), select').forEach(el => {
+        el.addEventListener('input', updatePreview);
     });
 
     // --- Bulk Export ---
 
-    document.getElementById('downloadBtn').onclick = async function() {
+    document.getElementById('downloadBtn').onclick = async function () {
         const zip = new JSZip();
         const btn = this;
-        const originalText = btn.innerText;
-        
-        btn.disabled = true;
-        btn.innerText = "Processing...";
+        btn.disabled  = true;
+        btn.innerText = 'Processing...';
 
-        // Generate each tag and add to ZIP
+        const savedName = elements.name.text;
+        const savedOrg  = elements.org.text;
+
         for (let i = 0; i < userData.length; i++) {
-            const user = userData[i];
-            const name = (user.Name || user.name || "Guest").toUpperCase();
-            const org = (user.Organisation || user.organisation || user.Org || "").toUpperCase();
-            
-            // Draw to hidden state
-            ctx.drawImage(templateImg, 0, 0);
-            
-            // Name styling
-            ctx.fillStyle = document.getElementById('nameColor').value;
-            ctx.font = `${document.getElementById('nameSize').value}px ${document.getElementById('nameFont').value}`;
-            ctx.textAlign = "center";
-            ctx.fillText(name, elements.name.x, elements.name.y);
-            
-            // Org styling
-            ctx.fillStyle = document.getElementById('orgColor').value;
-            ctx.font = `${document.getElementById('orgSize').value}px ${document.getElementById('orgFont').value}`;
-            ctx.fillText(org, elements.org.x, elements.org.y);
-
-            // Convert canvas to blob and add to zip
-            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-            zip.file(`tag_${name.replace(/\s+/g, '_')}_${i}.png`, blob);
+            const u = userData[i];
+            elements.name.text = normalizeText(u.Name || u.name || 'Guest');
+            elements.org.text  = normalizeText(u.Organisation || u.organisation || u.Org || '');
+            updatePreview(true);
+            const blob     = await new Promise(r => canvas.toBlob(r, 'image/png'));
+            const safeName = elements.name.text.replace(/\s+/g, '_');
+            zip.file(`tag_${safeName}_${i}.png`, blob);
         }
 
-        // Generate ZIP file and trigger download
-        const content = await zip.generateAsync({ type: "blob" });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(content);
-        link.download = "nametags_bulk.zip";
-        link.click();
+        const content = await zip.generateAsync({ type: 'blob' });
+        const a       = document.createElement('a');
+        a.href        = URL.createObjectURL(content);
+        a.download    = 'nametags_bulk.zip';
+        a.click();
 
-        // Reset UI
-        btn.disabled = false;
-        btn.innerText = originalText;
-        updatePreview(); // Return canvas to preview state
+        elements.name.text = savedName;
+        elements.org.text  = savedOrg;
+        btn.disabled  = false;
+        btn.innerText = 'Generate & Download All';
+        updatePreview();
     };
-
 </script>
 
 </body>
