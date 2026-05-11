@@ -14,47 +14,31 @@
 
         body {
             background-color: var(--space-bg);
-            /* Starry background effect with 16 layers for density and randomness */
-            background-image: /* Layer 1: Tiny, faint stars */
+            background-image:
                 radial-gradient(circle, rgba(255,255,255,0.3) 0.5px, transparent 1px),
-                /* Layer 2: Tiny, faint stars */
                 radial-gradient(circle, rgba(255,255,255,0.2) 0.8px, transparent 1.5px),
-                /* Layer 3: Tiny, faint stars */
                 radial-gradient(circle, rgba(255,255,255,0.4) 0.6px, transparent 1.2px),
-                /* Layer 4: Tiny, bright stars */
                 radial-gradient(circle, rgba(255,255,255,0.9) 0.5px, transparent 1px),
-                /* Layer 5: Tiny, bright stars */
                 radial-gradient(circle, rgba(255,255,255,0.8) 0.7px, transparent 1.4px),
-                /* Layer 6: Tiny, bright stars */
                 radial-gradient(circle, rgba(255,255,255,0.7) 0.6px, transparent 1.2px),
-                /* Layer 7: Small, medium stars */
                 radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 2px),
-                /* Layer 8: Small, medium stars */
                 radial-gradient(circle, rgba(255,255,255,0.5) 1.2px, transparent 2.4px),
-                /* Layer 9: Small, medium stars */
                 radial-gradient(circle, rgba(255,255,255,0.7) 0.9px, transparent 1.8px),
-                /* Layer 10: Small, faint stars */
                 radial-gradient(circle, rgba(255,255,255,0.3) 1.1px, transparent 2.2px),
-                /* Layer 11: Small, faint stars */
                 radial-gradient(circle, rgba(255,255,255,0.2) 1.3px, transparent 2.6px),
-                /* Layer 12: Small, faint stars */
                 radial-gradient(circle, rgba(255,255,255,0.4) 1px, transparent 2px),
-                /* Layer 13: Medium, faint stars */
                 radial-gradient(circle, rgba(255,255,255,0.25) 1.5px, transparent 3px),
-                /* Layer 14: Medium, faint stars */
                 radial-gradient(circle, rgba(255,255,255,0.15) 1.8px, transparent 3.6px),
-                /* Layer 15: Medium, faint stars */
                 radial-gradient(circle, rgba(255,255,255,0.3) 1.6px, transparent 3.2px),
-                /* Layer 16: Larger, very faint "nebula" spots */
                 radial-gradient(circle, rgba(255,255,255,0.1) 2px, transparent 4px);
-            background-size: 
+            background-size:
                 1500px 1500px, 1200px 1200px, 1000px 1000px,
                 900px 900px, 750px 750px, 600px 600px,
                 500px 500px, 450px 450px, 400px 400px,
                 350px 350px, 300px 300px, 250px 250px,
                 200px 200px, 180px 180px, 160px 160px,
                 140px 140px;
-            background-position: 
+            background-position:
                 300px 800px, 1200px 150px, 700px 1300px,
                 1800px 400px, 50px 1100px, 1000px 600px,
                 200px 100px, 900px 950px, 100px 750px,
@@ -66,17 +50,19 @@
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: var(--text-color);
-            overflow-x: hidden;
-            min-height: 2000px; /* Ensures enough room for the snake path */
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .container {
             position: relative;
             width: 100%;
-            max-width: 1000px;
-            margin: 50px auto;
-            height: 1800px;
-            padding-bottom: 200px;
+            max-width: calc(100vh * 16 / 9);
+            aspect-ratio: 16 / 9;
+            margin: 0 auto;
         }
 
         /* The SVG Path for the "Snake" Trail */
@@ -108,8 +94,8 @@
         /* Satellite at the end */
         .satellite-end {
             position: absolute;
-            width: 240px;
-            height: 240px;
+            width: 160px;
+            height: 160px;
             z-index: 3;
             transform: translate(-50%, -50%);
             background-image: url('../resources/textures/general2_w_o_background.png');
@@ -232,6 +218,10 @@
             transition-delay: 0s;
         }
 
+        .info-box[style*="bottom"].active {
+            transform: translateX(-50%);
+        }
+
         .info-box h3 {
             margin: 0 0 10px 0;
             color: var(--glow-color);
@@ -276,21 +266,21 @@
 <body>
 
 <div class="container" id="timelineContainer">
-    <svg class="timeline-svg" viewBox="0 0 1000 1800" preserveAspectRatio="none">
-        <path id="snakePath" class="trail-path" d="M 50 50 C 80 154, 100 250, 552 162 S 1102 400, 671 427 S 241 460, 157 616 S 700 650, 919 740 S 118 1186, 168 939 S 676 1117, 929 1232 S 472.3333 1353.3333, 244 1414 S 244 1717, 726 1674" />
+    <svg class="timeline-svg" viewBox="0 0 1600 900" preserveAspectRatio="none">
+        <path id="snakePath" class="trail-path" d="M 50 200 C 175 165, 270 138, 352 135 S 490 210, 608 200 S 745 135, 880 135 S 1048 208, 1152 200 S 1318 130, 1408 135 C 1528 145, 1568 440, 1510 590 S 1348 705, 1152 702 S 960 742, 880 738" />
     </svg>
 
-    <div class="satellite-end" style="left: 72.6%; top: 93%;"></div>
+    <div class="satellite-end" style="left: 55%; top: 82%;"></div>
 
-    <!-- Node 1: Sputnik -->
-    <div class="node" style="left: 10%; top: 8.3%;" onclick="toggleBox(1)">
+    <!-- Node 1: CHESS start -->
+    <div class="node" style="left: 5%; top: 22%;" onclick="toggleBox(1)">
         <div class="date-label">September 2018</div>
         <img class="thumbnail" src="https://www.dropbox.com/scl/fi/wj8ku5cyujcku2bt2g8dm/CHESS-Light.png?rlkey=lyj57gg95xtm2208tzo57arrc&st=l0djaqje&raw=1" alt="Point 1">
         <div id="box-1" class="info-box">
             <span class="close-btn" onclick="event.stopPropagation(); toggleBox(1)">×</span>
             <h3>Start of CHESS mission</h3>
-            <p>EPFL students and the EPFL Space Center came together to laydown the basis of what would be the CHESS mission. 
-                From the start, the goal was very ambitious: to go beyond theory and build real spacecraft systems, 
+            <p>EPFL students and the EPFL Space Center came together to laydown the basis of what would be the CHESS mission.
+                From the start, the goal was very ambitious: to go beyond theory and build real spacecraft systems,
                 to design and launch CubeSats from scratch, not just participate in competitions.
                 The CHESS mission—was initiated at EPFL’s space ecosystem:
                 Initially conceived as a constellation of small satellites, it aimes at collecting scientific measurements
@@ -298,52 +288,52 @@
         </div>
     </div>
 
-    <!-- Node 2: Apollo 11 -->
-    <div class="node" style="left: 60%; top: 9%;" onclick="toggleBox(2)">
+    <!-- Node 2: Foundation of EST -->
+    <div class="node" style="left: 22%; top: 15%;" onclick="toggleBox(2)">
         <div class="date-label">September 2019</div>
         <img class="thumbnail" src="https://www.dropbox.com/scl/fi/x5b8rzkahxdyzeji4wdkq/SpacecraftTeam-icon.png?rlkey=chbl8tndyop3vaohra1f28nf5&st=g0pqf2uf&raw=1" alt="Point 2">
         <div id="box-2" class="info-box">
             <span class="close-btn" onclick="event.stopPropagation(); toggleBox(2)">×</span>
             <h3>Foundation of EST</h3>
             <p>EPFL Spacecraft team is officially created and registered as a MAKE project and an EPFL association.
-                The team started organizing itself into engineering sub-teams including software, electronics, structures, and telecom, 
+                The team started organizing itself into engineering sub-teams including software, electronics, structures, and telecom,
                 and they worked on designing a CubeSat platform; developing subsystems like onboard computer (OBC), communications, and power systems;
-                launching student-oriented projects like CanSat (mini satellites for training) and early prototypes for subsystems. 
+                launching student-oriented projects like CanSat (mini satellites for training) and early prototypes for subsystems.
                 Importantly, their mission evolved from pure research toward hands-on engineering + industry collaboration.
             </p>
         </div>
     </div>
 
-    <!-- Node 3: Voyager -->
-    <div class="node" style="left: 40%; top: 25%;" onclick="toggleBox(3)">
+    <!-- Node 3: Bunny launch -->
+    <div class="node" style="left: 38%; top: 22%;" onclick="toggleBox(3)">
         <div class="date-label">January 2023</div>
         <img class="thumbnail" src="https://www.dropbox.com/scl/fi/wy6gses50mo7hxk4ls1n5/2026-05-11-00.00.31.png?rlkey=zic94nfo445dxsohxtljtaatu&st=i287dwmv&raw=1" alt="Point 3">
         <div id="box-3" class="info-box">
             <span class="close-btn" onclick="event.stopPropagation(); toggleBox(3)">×</span>
             <h3>Bunny launch mission</h3>
             <p>Bunny, a prototype of the onboard computer, was the first proper mission by EST:
-                On January 31, the EPFL Spacecraft Team's onboard computer Bunny was launched in California, USA, 
-                hosted on a D-Orbit spacecraft as part of Starlink's 2-6 mission. 
+                On January 31, the EPFL Spacecraft Team’s onboard computer Bunny was launched in California, USA,
+                hosted on a D-Orbit spacecraft as part of Starlink’s 2-6 mission.
                 This is the first time anything made at EPFL has been launched into space since 2009.</p>
         </div>
     </div>
 
-    <!-- Node 4: Space Shuttle -->
-    <div class="node" style="left: 80%; top: 40%;" onclick="toggleBox(4)">
+    <!-- Node 4: Twocan -->
+    <div class="node" style="left: 55%; top: 15%;" onclick="toggleBox(4)">
         <div class="date-label">January 2025</div>
         <img class="thumbnail" src="https://www.dropbox.com/scl/fi/anqbc3d2lr7qxj1ijtckl/general.png?rlkey=yiam3ygb1qd270x126ipy8ntq&st=p0oq4xiu&raw=1" alt="Point 4">
         <div id="box-4" class="info-box">
             <span class="close-btn" onclick="event.stopPropagation(); toggleBox(4)">×</span>
             <h3>Twocan computer</h3>
-            <p>Twocan is our last onboard computer that was flown in January 2025 and is still orbiting Earth right now. 
-                Learning from the flaws of Bunny, Twocan aims to provide a more powerful and redundant onboard computer. 
+            <p>Twocan is our last onboard computer that was flown in January 2025 and is still orbiting Earth right now.
+                Learning from the flaws of Bunny, Twocan aims to provide a more powerful and redundant onboard computer.
                 This redundancy ensures that in the event of a computer failure, the other can take over.
                 </p>
         </div>
     </div>
 
-    <!-- Node 5: Hubble -->
-    <div class="node" style="left: 18%; top: 52.8%;" onclick="toggleBox(5)">
+    <!-- Node 5: CDR -->
+    <div class="node" style="left: 72%; top: 22%;" onclick="toggleBox(5)">
         <div class="date-label">April 2026</div>
         <img class="thumbnail" src="https://www.dropbox.com/scl/fi/1dvq2hyqe0u0buygnvqet/IMGP7150.jpg?rlkey=dql304suo0ciimkxnm989gsry&st=s3mdxzxz&raw=1" alt="Point 5">
         <div id="box-5" class="info-box">
@@ -357,23 +347,22 @@
         </div>
     </div>
 
-    <!-- Node 6: ISS -->
-    <div class="node" style="left: 80%; top: 65%;" onclick="toggleBox(6)">
+    <!-- Node 6: Launch -->
+    <div class="node" style="left: 88%; top: 15%;" onclick="toggleBox(6)">
         <div class="date-label">2027</div>
         <img class="thumbnail" src="https://www.dropbox.com/scl/fi/h0bewetpa0pnto2axufap/2026-03-27-00.52.26.png?rlkey=ttd359ww098s4xhbf9en0r0el&st=hngk5cpv&raw=1" alt="Point 6">
         <div id="box-6" class="info-box">
             <span class="close-btn" onclick="event.stopPropagation(); toggleBox(6)">×</span>
             <h3>Launching of our CHESS satellite into space!</h3>
             <p>The final version of the satellite is assembled and placed onto the carrier rocket, ready for its grand entry launch into the Exosphere.</p>
-                    
         </div>
     </div>
 
-    <!-- Node 7: James Webb -->
-    <div class="node" style="left: 40%; top: 92%;" onclick="toggleBox(7)">
+    <!-- Node 7: Future -->
+    <div class="node" style="left: 72%; top: 78%;" onclick="toggleBox(7)">
         <div class="date-label">2027++</div>
         <img class="thumbnail" src="https://www.dropbox.com/scl/fi/dpytqretdr0p42erh417h/pull_2.svg?rlkey=0buw4vw6kb1ldz2nwnx0swwh3&st=7pchye59&raw=1" alt="Point 7">
-        <div id="box-7" class="info-box">
+        <div id="box-7" class="info-box" style="top: auto; bottom: 70px; transform: translate(-50%, 0);">
             <span class="close-btn" onclick="event.stopPropagation(); toggleBox(7)">×</span>
             <h3>Future?</h3>
             <p>The CHESS journey will continue with Pathfinder 1 and Pathfinder 2, to form a constellation of scientific
@@ -383,19 +372,8 @@
         </div>
     </div>
 
-    <!-- Node 8: James Webb
-    <div class="node" style="left: 40%; top: 92%;" onclick="toggleBox(8)">
-        <div class="date-label">2027++</div>
-        <img class="thumbnail" src="https://picsum.photos/id/40/100/100" alt="Point 8">
-        <div id="box-8" class="info-box">
-            <span class="close-btn" onclick="event.stopPropagation(); toggleBox(8)">×</span>
-            <h3></h3>
-            <p>The premier space observatory, designed to solve mysteries in our solar system and beyond.</p>
-        </div>
-    </div> -->
-
-    <!-- Speech Bubble Node 1 -->
-    <div class="speech-bubble point-down" style="left: 90%; top: 17.7%;" onclick="toggleBox(101)">
+    <!-- Speech Bubble: 3 co-founders -->
+    <div class="speech-bubble point-down" style="left: 13%; top: 13%;" onclick="toggleBox(101)">
         3
         <div id="box-101" class="info-box">
             <span class="close-btn" onclick="event.stopPropagation(); toggleBox(101)">×</span>
@@ -404,18 +382,8 @@
         </div>
     </div>
 
-    <!-- Speech Bubble Node 3 -->
-    <div class="speech-bubble point-up" style="left: 40%; top: 58.5%;" onclick="toggleBox(103)">
-        87
-        <div id="box-103" class="info-box">
-            <span class="close-btn" onclick="event.stopPropagation(); toggleBox(103)">×</span>
-            <h3>...members across 11 departments</h3>
-            <p>and still growing...</p>
-        </div>
-    </div>
-
-    <!-- Speech Bubble Node 2 -->
-    <div class="speech-bubble point-down label-red" style="left: 35%; top: 47%;" onclick="toggleBox(102)">
+    <!-- Speech Bubble: Today -->
+    <div class="speech-bubble point-down label-red" style="left: 80%; top: 14%;" onclick="toggleBox(102)">
         Today
         <div id="box-102" class="info-box">
             <span class="close-btn" onclick="event.stopPropagation(); toggleBox(102)">×</span>
@@ -426,9 +394,19 @@
         </div>
     </div>
 
-    <!-- Slingshot Launcher (between Node 6 and Node 7) -->
-    <div style="position: absolute; left: 55%; top: 75%; transform: translate(-50%, -50%); text-align: center; z-index: 10;">
-        <div style="color: var(--glow-color); font-weight: bold; font-size: 1.2rem; margin-bottom: 6px; text-shadow: 0 0 12px var(--glow-color); letter-spacing: 1px;">Launch the rocket!</div>
+    <!-- Speech Bubble: 87 members -->
+    <div class="speech-bubble point-up" style="left: 80%; top: 22%;" onclick="toggleBox(103)">
+        87
+        <div id="box-103" class="info-box" style="top: auto; bottom: 70px; transform: translate(-50%, 0);">
+            <span class="close-btn" onclick="event.stopPropagation(); toggleBox(103)">×</span>
+            <h3>...members across 11 departments</h3>
+            <p>and still growing...</p>
+        </div>
+    </div>
+
+    <!-- Slingshot Launcher -->
+    <div style="position: absolute; left: 38%; top: 72%; transform: translate(-50%, -50%); text-align: center; z-index: 10;">
+        <div style="color: var(--glow-color); font-weight: bold; font-size: 1rem; margin-bottom: 4px; text-shadow: 0 0 12px var(--glow-color); letter-spacing: 1px;">Launch the rocket!</div>
         <div id="slingshot-wrap">
             <canvas id="slingshotCanvas" width="200" height="280"></canvas>
         </div>
