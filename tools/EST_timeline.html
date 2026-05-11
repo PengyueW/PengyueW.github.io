@@ -123,8 +123,7 @@
             transform: translate(-50%, -50%);
             cursor: pointer;
             transition: transform 0.3s ease;
-            width: 44px;
-            height: 44px;
+            padding: 10px;
             background: var(--glow-color);
             color: var(--space-bg);
             border-radius: 8px;
@@ -148,6 +147,12 @@
             width: 0;
             height: 0;
             border-style: solid;
+        }
+        .speech-bubble.point-down.label-red {
+            color: #00f2ff;
+        }
+        .speech-bubble.point-down.label-red::after {
+            border-color: #fa5a02 transparent transparent transparent !important;
         }
 
         .speech-bubble.point-down::after {
@@ -198,6 +203,10 @@
             border-radius: 4px;
         }
 
+        .label-red {
+            background: #fa5a02 !important;
+        }
+
         /* Information Box (Hidden by default) */
         .info-box {
             opacity: 0;
@@ -242,6 +251,26 @@
             color: #ff4d4d;
             font-weight: bold;
         }
+
+        /* Slingshot Launcher */
+        #slingshot-wrap {
+            position: relative;
+            display: inline-block;
+            width: 200px;
+            height: 280px;
+            z-index: 10;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+        }
+        #slingshotCanvas { width: 100%; height: 100%; }
+        #rocketTrailCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 99;
+        }
     </style>
 </head>
 <body>
@@ -256,97 +285,152 @@
     <!-- Node 1: Sputnik -->
     <div class="node" style="left: 10%; top: 8.3%;" onclick="toggleBox(1)">
         <div class="date-label">September 2018</div>
-        <img class="thumbnail" src="https://picsum.photos/id/10/100/100" alt="Point 1">
+        <img class="thumbnail" src="https://www.dropbox.com/scl/fi/wj8ku5cyujcku2bt2g8dm/CHESS-Light.png?rlkey=lyj57gg95xtm2208tzo57arrc&st=l0djaqje&raw=1" alt="Point 1">
         <div id="box-1" class="info-box">
             <span class="close-btn" onclick="event.stopPropagation(); toggleBox(1)">×</span>
             <h3>Start of CHESS mission</h3>
-            <p>EPFL students and the EPFL Space Center came together to laydown the basis of what would be the CHESS mission.</p>
+            <p>EPFL students and the EPFL Space Center came together to laydown the basis of what would be the CHESS mission. 
+                From the start, the goal was very ambitious: to go beyond theory and build real spacecraft systems, 
+                to design and launch CubeSats from scratch, not just participate in competitions.
+                The CHESS mission—was initiated at EPFL’s space ecosystem:
+                Initially conceived as a constellation of small satellites, it aimes at collecting scientific measurements
+                (e.g., astrophysics / atmosphere) and tech demonstrations.</p>
         </div>
     </div>
 
     <!-- Node 2: Apollo 11 -->
     <div class="node" style="left: 60%; top: 9%;" onclick="toggleBox(2)">
         <div class="date-label">September 2019</div>
-        <img class="thumbnail" src="https://picsum.photos/id/15/100/100" alt="Point 2">
+        <img class="thumbnail" src="https://www.dropbox.com/scl/fi/x5b8rzkahxdyzeji4wdkq/SpacecraftTeam-icon.png?rlkey=chbl8tndyop3vaohra1f28nf5&st=g0pqf2uf&raw=1" alt="Point 2">
         <div id="box-2" class="info-box">
             <span class="close-btn" onclick="event.stopPropagation(); toggleBox(2)">×</span>
             <h3>Foundation of EST</h3>
-            <p>EPFL Spacecraft team is created with only ... members</p>
+            <p>EPFL Spacecraft team is officially created and registered as a MAKE project and an EPFL association.
+                The team started organizing itself into engineering sub-teams including software, electronics, structures, and telecom, 
+                and they worked on designing a CubeSat platform; developing subsystems like onboard computer (OBC), communications, and power systems;
+                launching student-oriented projects like CanSat (mini satellites for training) and early prototypes for subsystems. 
+                Importantly, their mission evolved from pure research toward hands-on engineering + industry collaboration.
+            </p>
         </div>
     </div>
 
     <!-- Node 3: Voyager -->
     <div class="node" style="left: 40%; top: 25%;" onclick="toggleBox(3)">
         <div class="date-label">January 2023</div>
-        <img class="thumbnail" src="https://picsum.photos/id/20/100/100" alt="Point 3">
+        <img class="thumbnail" src="https://www.dropbox.com/scl/fi/wy6gses50mo7hxk4ls1n5/2026-05-11-00.00.31.png?rlkey=zic94nfo445dxsohxtljtaatu&st=i287dwmv&raw=1" alt="Point 3">
         <div id="box-3" class="info-box">
             <span class="close-btn" onclick="event.stopPropagation(); toggleBox(3)">×</span>
             <h3>Bunny launch mission</h3>
-            <p>Voyager 1 and 2 were launched to explore the outer planets and eventually enter interstellar space.</p>
+            <p>Bunny, a prototype of the onboard computer, was the first proper mission by EST:
+                On January 31, the EPFL Spacecraft Team's onboard computer Bunny was launched in California, USA, 
+                hosted on a D-Orbit spacecraft as part of Starlink's 2-6 mission. 
+                This is the first time anything made at EPFL has been launched into space since 2009.</p>
         </div>
     </div>
 
     <!-- Node 4: Space Shuttle -->
     <div class="node" style="left: 80%; top: 40%;" onclick="toggleBox(4)">
         <div class="date-label">January 2025</div>
-        <img class="thumbnail" src="https://picsum.photos/id/25/100/100" alt="Point 4">
+        <img class="thumbnail" src="https://www.dropbox.com/scl/fi/anqbc3d2lr7qxj1ijtckl/general.png?rlkey=yiam3ygb1qd270x126ipy8ntq&st=p0oq4xiu&raw=1" alt="Point 4">
         <div id="box-4" class="info-box">
             <span class="close-btn" onclick="event.stopPropagation(); toggleBox(4)">×</span>
-            <h3>First Space Shuttle Flight</h3>
-            <p>The launch of Columbia (STS-1) marks the beginning of the reusable spacecraft era.</p>
+            <h3>Twocan computer</h3>
+            <p>Twocan is our last onboard computer that was flown in January 2025 and is still orbiting Earth right now. 
+                Learning from the flaws of Bunny, Twocan aims to provide a more powerful and redundant onboard computer. 
+                This redundancy ensures that in the event of a computer failure, the other can take over.
+                </p>
         </div>
     </div>
 
     <!-- Node 5: Hubble -->
     <div class="node" style="left: 18%; top: 52.8%;" onclick="toggleBox(5)">
         <div class="date-label">April 2026</div>
-        <img class="thumbnail" src="https://picsum.photos/id/30/100/100" alt="Point 5">
+        <img class="thumbnail" src="https://www.dropbox.com/scl/fi/1dvq2hyqe0u0buygnvqet/IMGP7150.jpg?rlkey=dql304suo0ciimkxnm989gsry&st=s3mdxzxz&raw=1" alt="Point 5">
         <div id="box-5" class="info-box">
             <span class="close-btn" onclick="event.stopPropagation(); toggleBox(5)">×</span>
-            <h3>Moved from conception stage to testing stage</h3>
-            <p>Deployed by the Space Shuttle Discovery, providing our clearest views yet of the deep universe.</p>
+            <h3>Critical design review and testing stage</h3>
+            <p>After completing the design phase and the critical design review in April 2026,
+                EST is ready to move on to the next phase in the journey, which is the testing and building
+                stage of the satellite. The team has a lot to do within this 1 year window before launch, including finalising
+                the prototype and constructing fully functional systems that are well-supported and tested to the maximum.
+            </p>
         </div>
     </div>
 
     <!-- Node 6: ISS -->
     <div class="node" style="left: 80%; top: 65%;" onclick="toggleBox(6)">
         <div class="date-label">2027</div>
-        <img class="thumbnail" src="https://picsum.photos/id/35/100/100" alt="Point 6">
+        <img class="thumbnail" src="https://www.dropbox.com/scl/fi/h0bewetpa0pnto2axufap/2026-03-27-00.52.26.png?rlkey=ttd359ww098s4xhbf9en0r0el&st=hngk5cpv&raw=1" alt="Point 6">
         <div id="box-6" class="info-box">
             <span class="close-btn" onclick="event.stopPropagation(); toggleBox(6)">×</span>
             <h3>Launching of our CHESS satellite into space!</h3>
-            <p>Assembly begins on the largest modular space station in low Earth orbit, a multinational collaborative project.</p>
+            <p>The final version of the satellite is assembled and placed onto the carrier rocket, ready for its grand entry launch into the Exosphere.</p>
+                    
         </div>
     </div>
 
     <!-- Node 7: James Webb -->
     <div class="node" style="left: 40%; top: 92%;" onclick="toggleBox(7)">
         <div class="date-label">2027++</div>
-        <img class="thumbnail" src="https://picsum.photos/id/40/100/100" alt="Point 7">
+        <img class="thumbnail" src="https://www.dropbox.com/scl/fi/dpytqretdr0p42erh417h/pull_2.svg?rlkey=0buw4vw6kb1ldz2nwnx0swwh3&st=7pchye59&raw=1" alt="Point 7">
         <div id="box-7" class="info-box">
             <span class="close-btn" onclick="event.stopPropagation(); toggleBox(7)">×</span>
-            <h3></h3>
-            <p>The premier space observatory, designed to solve mysteries in our solar system and beyond.</p>
+            <h3>Future?</h3>
+            <p>The CHESS journey will continue with Pathfinder 1 and Pathfinder 2, to form a constellation of scientific
+                satellites orbiting Earth in different orbits. This is an ambitious project that will span over half a decade,
+                but Pathfinder 0 will lay solid foundations for the days to come.
+            </p>
         </div>
     </div>
 
-    <!-- Speech Bubble Node 1 -->
-    <div class="speech-bubble point-down" style="left: 90%; top: 17.7%;" onclick="toggleBox(8)">
-        8
+    <!-- Node 8: James Webb
+    <div class="node" style="left: 40%; top: 92%;" onclick="toggleBox(8)">
+        <div class="date-label">2027++</div>
+        <img class="thumbnail" src="https://picsum.photos/id/40/100/100" alt="Point 8">
         <div id="box-8" class="info-box">
             <span class="close-btn" onclick="event.stopPropagation(); toggleBox(8)">×</span>
-            <h3>Subsystem Integration</h3>
-            <p>A key phase where different satellite components are tested together.</p>
+            <h3></h3>
+            <p>The premier space observatory, designed to solve mysteries in our solar system and beyond.</p>
+        </div>
+    </div> -->
+
+    <!-- Speech Bubble Node 1 -->
+    <div class="speech-bubble point-down" style="left: 90%; top: 17.7%;" onclick="toggleBox(101)">
+        3
+        <div id="box-101" class="info-box">
+            <span class="close-btn" onclick="event.stopPropagation(); toggleBox(101)">×</span>
+            <h3>... co-founders were the earliest members</h3>
+            <p>building the EST we know of today.</p>
+        </div>
+    </div>
+
+    <!-- Speech Bubble Node 3 -->
+    <div class="speech-bubble point-up" style="left: 40%; top: 58.5%;" onclick="toggleBox(103)">
+        87
+        <div id="box-103" class="info-box">
+            <span class="close-btn" onclick="event.stopPropagation(); toggleBox(103)">×</span>
+            <h3>...members across 11 departments</h3>
+            <p>and still growing...</p>
         </div>
     </div>
 
     <!-- Speech Bubble Node 2 -->
-    <div class="speech-bubble point-up" style="left: 40%; top: 58.5%;" onclick="toggleBox(9)">
-        9
-        <div id="box-9" class="info-box">
-            <span class="close-btn" onclick="event.stopPropagation(); toggleBox(9)">×</span>
-            <h3>Flight Model Assembly</h3>
-            <p>The final version of the satellite is built, ready for launch preparations.</p>
+    <div class="speech-bubble point-down label-red" style="left: 35%; top: 47%;" onclick="toggleBox(102)">
+        Today
+        <div id="box-102" class="info-box">
+            <span class="close-btn" onclick="event.stopPropagation(); toggleBox(102)">×</span>
+            <h3>Flight Model Integration</h3>
+            <p>Over the following months, parts from different subsystems will start to come together
+                after testing separately to integrate into one big system that can support itself in space.
+            </p>
+        </div>
+    </div>
+
+    <!-- Slingshot Launcher (between Node 6 and Node 7) -->
+    <div style="position: absolute; left: 55%; top: 75%; transform: translate(-50%, -50%); text-align: center; z-index: 10;">
+        <div style="color: var(--glow-color); font-weight: bold; font-size: 1.2rem; margin-bottom: 6px; text-shadow: 0 0 12px var(--glow-color); letter-spacing: 1px;">Launch the rocket!</div>
+        <div id="slingshot-wrap">
+            <canvas id="slingshotCanvas" width="200" height="280"></canvas>
         </div>
     </div>
 </div>
@@ -371,6 +455,321 @@
             document.querySelectorAll('.info-box').forEach(b => b.classList.remove('active'));
         }
     });
+</script>
+
+<canvas id="rocketTrailCanvas"></canvas>
+
+<script>
+(function () {
+    const canvas = document.getElementById('slingshotCanvas');
+    const trail  = document.getElementById('rocketTrailCanvas');
+    const ctx    = canvas.getContext('2d');
+    const tc     = trail.getContext('2d');
+
+    function resizeTrail() {
+        trail.width  = window.innerWidth;
+        trail.height = window.innerHeight;
+    }
+    resizeTrail();
+    window.addEventListener('resize', resizeTrail);
+
+    // Canvas logical dimensions
+    const CW = 200, CH = 280, CX = 100;
+
+    // Slingshot geometry
+    const TRUNK_BOT  = { x: CX,  y: CH - 10 };
+    const FORK_SPLIT = { x: CX,  y: 182 };
+    const LTip       = { x: 50,  y: 116 };
+    const RTip       = { x: 150, y: 116 };
+    const REST_Y     = 100;
+    const MAX_PULL   = 75;
+
+    // State
+    let phase = 'idle'; // idle | drag | fly | reset
+    let rx = CX, ry = REST_Y;   // rocket canvas coords (on slingshot)
+    let fx = 0,  fy = 0;        // rocket screen coords (in flight)
+    let vx = 0,  vy = 0;        // flight velocity
+    let particles = [];
+    let frame = 0;
+    let hintAlpha   = 1.0;
+    let hintFading  = false; // fading out
+    let hintFadeIn  = false; // fading back in
+    let idleTimer   = null;
+
+    function scheduleHintReturn() {
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => { hintFadeIn = true; hintFading = false; }, 10000);
+    }
+    function cancelHintReturn() {
+        clearTimeout(idleTimer);
+        hintFadeIn = false;
+        hintFading = true;
+    }
+    scheduleHintReturn(); // start timer immediately so hint returns if user never touches it
+
+    // Canvas ↔ screen coordinate helpers
+    function toCanvas(sx, sy) {
+        const r = canvas.getBoundingClientRect();
+        return { x: (sx - r.left) * (CW / r.width), y: (sy - r.top) * (CH / r.height) };
+    }
+    function toScreen(cx, cy) {
+        const r = canvas.getBoundingClientRect();
+        return { x: r.left + cx * (r.width / CW), y: r.top + cy * (r.height / CH) };
+    }
+
+    // Input
+    canvas.addEventListener('mousedown', e => {
+        if (phase !== 'idle') return;
+        const p = toCanvas(e.clientX, e.clientY);
+        if (Math.hypot(p.x - rx, p.y - ry) < 38) { phase = 'drag'; cancelHintReturn(); e.preventDefault(); }
+    });
+    canvas.addEventListener('touchstart', e => {
+        if (phase !== 'idle') return;
+        const p = toCanvas(e.touches[0].clientX, e.touches[0].clientY);
+        if (Math.hypot(p.x - rx, p.y - ry) < 38) { phase = 'drag'; cancelHintReturn(); e.preventDefault(); }
+    }, { passive: false });
+
+    window.addEventListener('mousemove', e => {
+        if (phase === 'drag') {
+            const p = toCanvas(e.clientX, e.clientY);
+            rx = Math.max(42, Math.min(158, p.x));
+            ry = Math.max(REST_Y, Math.min(REST_Y + MAX_PULL, p.y));
+        } else if (phase === 'idle') {
+            const p = toCanvas(e.clientX, e.clientY);
+            canvas.style.cursor = Math.hypot(p.x - rx, p.y - ry) < 38 ? 'grab' : 'default';
+        }
+    });
+    window.addEventListener('touchmove', e => {
+        if (phase !== 'drag') return;
+        const p = toCanvas(e.touches[0].clientX, e.touches[0].clientY);
+        rx = Math.max(42, Math.min(158, p.x));
+        ry = Math.max(REST_Y, Math.min(REST_Y + MAX_PULL, p.y));
+        e.preventDefault();
+    }, { passive: false });
+
+    function doRelease() {
+        if (phase !== 'drag') return;
+        canvas.style.cursor = 'grab';
+        const pullY = ry - REST_Y;
+        const pullX = rx - CX;
+        if (pullY < 8) { phase = 'idle'; rx = CX; ry = REST_Y; scheduleHintReturn(); return; }
+
+        const s = toScreen(rx, ry);
+        fx = s.x; fy = s.y;
+        vx = -pullX * 0.28;
+        vy = -(pullY * 0.3 + 8);
+
+        phase = 'fly';
+    }
+    window.addEventListener('mouseup',  doRelease);
+    window.addEventListener('touchend', doRelease);
+
+    // Exhaust particle spawner
+    const EXHAUST_COLORS = ['#ff6b00','#ffaa00','#fff0a0','#ff3300','#ffcc00','#ff8844'];
+    function spawnExhaust() {
+        const ang    = Math.atan2(vy, vx) + Math.PI; // behind rocket
+        const spread = Math.PI * 0.38;
+        for (let i = 0; i < 5; i++) {
+            const a   = ang + (Math.random() - 0.5) * spread;
+            const spd = 1.8 + Math.random() * 2.8;
+            particles.push({
+                x: fx + Math.cos(ang) * 16,
+                y: fy + Math.sin(ang) * 16,
+                vx: Math.cos(a) * spd,
+                vy: Math.sin(a) * spd,
+                alpha: 0.85 + Math.random() * 0.15,
+                size:  7 + Math.random() * 11,
+                color: EXHAUST_COLORS[Math.floor(Math.random() * EXHAUST_COLORS.length)]
+            });
+        }
+    }
+
+    // Draw slingshot canvas
+    function drawSlingshot() {
+        ctx.clearRect(0, 0, CW, CH);
+
+        // Hint text (fades out after first launch)
+        if (hintFading  && hintAlpha > 0) hintAlpha = Math.max(0, hintAlpha - 0.02);
+        if (hintFadeIn  && hintAlpha < 1) { hintAlpha = Math.min(1, hintAlpha + 0.02); if (hintAlpha >= 1) hintFadeIn = false; }
+        if (hintAlpha > 0) {
+            const bounce = phase === 'idle' ? Math.sin(frame * 0.07) * 5 : 0;
+            ctx.save();
+            ctx.globalAlpha = hintAlpha;
+            ctx.fillStyle   = '#a0e8ff';
+            ctx.font        = 'bold 11px sans-serif';
+            ctx.textAlign   = 'center';
+            ctx.fillText('Pull down to launch', CX, 22 + bounce);
+            ctx.font = '18px sans-serif';
+            ctx.fillText('↓', CX, 42 + bounce);
+            ctx.restore();
+        }
+
+        ctx.lineCap    = 'round';
+        ctx.lineJoin   = 'round';
+
+        // Drop shadow under wood
+        ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+        ctx.lineWidth   = 14;
+        [[TRUNK_BOT, FORK_SPLIT], [FORK_SPLIT, LTip], [FORK_SPLIT, RTip]].forEach(([a, b]) => {
+            ctx.beginPath();
+            ctx.moveTo(a.x + 2, a.y + 2);
+            ctx.lineTo(b.x + 2, b.y + 2);
+            ctx.stroke();
+        });
+
+        // Wood body
+        ctx.strokeStyle = '#6b3d12';
+        ctx.lineWidth   = 10;
+        [[TRUNK_BOT, FORK_SPLIT], [FORK_SPLIT, LTip], [FORK_SPLIT, RTip]].forEach(([a, b]) => {
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+        });
+
+        // Wood highlight
+        ctx.strokeStyle = '#a06030';
+        ctx.lineWidth   = 2;
+        ctx.globalAlpha = 0.3;
+        [[{x:TRUNK_BOT.x+3,y:TRUNK_BOT.y-5},{x:FORK_SPLIT.x+2,y:FORK_SPLIT.y+5}],
+         [{x:FORK_SPLIT.x+2,y:FORK_SPLIT.y},{x:LTip.x+4,y:LTip.y+3}],
+         [{x:FORK_SPLIT.x+2,y:FORK_SPLIT.y},{x:RTip.x-4,y:RTip.y+3}]].forEach(([a, b]) => {
+            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        });
+        ctx.globalAlpha = 1;
+
+        // Tip knobs
+        [LTip, RTip].forEach(tip => {
+            ctx.shadowColor = 'rgba(0,0,0,0.4)';
+            ctx.shadowBlur  = 6;
+            ctx.fillStyle   = '#3e1c05';
+            ctx.beginPath(); ctx.arc(tip.x, tip.y, 7, 0, Math.PI * 2); ctx.fill();
+            ctx.shadowBlur  = 0;
+            ctx.strokeStyle = '#6b3d12'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.arc(tip.x, tip.y, 7, 0, Math.PI * 2); ctx.stroke();
+        });
+
+        // Elastic bands + rocket (only when on slingshot)
+        if (phase === 'idle' || phase === 'drag') {
+            const tension = (ry - REST_Y) / MAX_PULL;
+
+            ctx.shadowColor = tension > 0.3 ? '#ff5533' : '#882222';
+            ctx.shadowBlur  = 3 + tension * 14;
+            ctx.strokeStyle = tension > 0.4 ? '#e03020' : '#bb1a1a';
+            ctx.lineWidth   = 2.5 + tension * 1.5;
+
+            [LTip, RTip].forEach((tip, i) => {
+                ctx.beginPath();
+                ctx.moveTo(tip.x, tip.y);
+                if (tension < 0.12) {
+                    // Slight droop at rest
+                    const mx = (tip.x + rx) / 2 + (i === 0 ? -5 : 5);
+                    const my = (tip.y + ry) / 2 - 4;
+                    ctx.quadraticCurveTo(mx, my, rx, ry);
+                } else {
+                    ctx.lineTo(rx, ry);
+                }
+                ctx.stroke();
+            });
+            ctx.shadowBlur = 0;
+
+            // Rocket emoji — rotate to face launch direction
+            const pullY = ry - REST_Y, pullX = rx - CX;
+            const launchAngle = pullY > 5
+                ? Math.atan2(-pullY, -pullX)
+                : -Math.PI / 2;
+
+            ctx.save();
+            ctx.translate(rx, ry);
+            // +PI/4 corrects for Apple emoji native ~45° tilt
+            ctx.rotate(launchAngle + Math.PI / 4);
+            ctx.font          = '30px serif';
+            ctx.textAlign     = 'center';
+            ctx.textBaseline  = 'middle';
+            ctx.fillText('🚀', 0, 0);
+            ctx.restore();
+        }
+    }
+
+    // Draw trail canvas (trajectory preview + exhaust + flying rocket)
+    function drawTrailCanvas() {
+        tc.clearRect(0, 0, trail.width, trail.height);
+
+        // Dotted trajectory arc while dragging
+        if (phase === 'drag') {
+            const py = ry - REST_Y;
+            if (py > 8) {
+                const px   = rx - CX;
+                const pvx0 = -px * 0.28;
+                const pvy0 = -(py * 0.3 + 8);
+                const s    = toScreen(rx, ry);
+                let ppx = s.x, ppy = s.y, pvvx = pvx0, pvvy = pvy0;
+                for (let i = 0; i < 28; i++) {
+                    pvvx *= 0.999; pvvy += 0.15;
+                    ppx += pvvx; ppy += pvvy;
+                    tc.globalAlpha = (1 - i / 28) * 0.5;
+                    tc.fillStyle   = '#a0e8ff';
+                    tc.beginPath();
+                    tc.arc(ppx, ppy, Math.max(1, 3 - i * 0.08), 0, Math.PI * 2);
+                    tc.fill();
+                }
+                tc.globalAlpha = 1;
+            }
+        }
+
+        // Exhaust particles
+        particles = particles.filter(p => p.alpha > 0.03);
+        particles.forEach(p => {
+            p.x += p.vx; p.y += p.vy;
+            p.vy    += 0.05;
+            p.alpha *= 0.90;
+            p.size  *= 0.96;
+            tc.save();
+            tc.globalAlpha = p.alpha;
+            tc.shadowColor = p.color;
+            tc.shadowBlur  = p.size;
+            tc.fillStyle   = p.color;
+            tc.beginPath(); tc.arc(p.x, p.y, p.size / 2, 0, Math.PI * 2); tc.fill();
+            tc.restore();
+        });
+
+        // Flying rocket
+        if (phase === 'fly') {
+            spawnExhaust();
+
+            vx *= 0.999; vy += 0.15;
+            fx += vx; fy += vy;
+
+            const ang = Math.atan2(vy, vx);
+            tc.save();
+            tc.translate(fx, fy);
+            tc.rotate(ang + Math.PI / 4);
+            tc.font         = '38px serif';
+            tc.textAlign    = 'center';
+            tc.textBaseline = 'middle';
+            tc.fillText('🚀', 0, 0);
+            tc.restore();
+
+            if (fy < -160 || fy > window.innerHeight + 160 || fx < -220 || fx > window.innerWidth + 220) {
+                phase = 'reset';
+                rx = CX; ry = REST_Y;
+                setTimeout(() => { phase = 'idle'; scheduleHintReturn(); }, 700);
+            }
+        }
+    }
+
+    function loop() {
+        frame++;
+        drawSlingshot();
+        if (phase !== 'idle' || particles.length > 0) {
+            drawTrailCanvas();
+        } else {
+            tc.clearRect(0, 0, trail.width, trail.height);
+        }
+        requestAnimationFrame(loop);
+    }
+    loop();
+})();
 </script>
 
 </body>
