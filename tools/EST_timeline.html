@@ -267,10 +267,10 @@
 
 <div class="container" id="timelineContainer">
     <svg class="timeline-svg" viewBox="0 0 1600 900" preserveAspectRatio="none">
-        <path id="snakePath" class="trail-path" d="M 50 200 C 175 165, 270 138, 352 135 S 490 210, 608 200 S 745 135, 880 135 S 1048 208, 1152 200 S 1318 130, 1408 135 C 1528 145, 1568 440, 1510 590 S 1348 705, 1152 702 S 960 742, 880 738" />
+        <path id="snakePath" class="trail-path" d="M 50 200 C 175 165, 270 138, 352 135 S 490 210, 608 200 S 745 135, 880 135 S 1048 208, 1152 200 S 1318 130, 1408 135 C 1585 140, 1595 355, 1560 385 C 1530 420, 1448 462, 1428 312 C 1408 162, 1572 192, 1572 452 C 1562 562, 1462 642, 1408 648 S 1120 715, 880 702 S 680 742, 560 738" />
     </svg>
 
-    <div class="satellite-end" style="left: 55%; top: 82%;"></div>
+    <div class="satellite-end" style="left: 35%; top: 82%;"></div>
 
     <!-- Node 1: CHESS start -->
     <div class="node" style="left: 5%; top: 22%;" onclick="toggleBox(1)">
@@ -304,12 +304,23 @@
         </div>
     </div>
 
-    <!-- Node 3: Bunny launch -->
-    <div class="node" style="left: 38%; top: 22%;" onclick="toggleBox(3)">
-        <div class="date-label">January 2023</div>
-        <img class="thumbnail" src="https://www.dropbox.com/scl/fi/wy6gses50mo7hxk4ls1n5/2026-05-11-00.00.31.png?rlkey=zic94nfo445dxsohxtljtaatu&st=i287dwmv&raw=1" alt="Point 3">
+    <!-- Node 3: Empty placeholder -->
+    <div class="node" style="left: 55%; top: 15%;" onclick="toggleBox(3)">
+        <div class="date-label">June 2023</div>
+        <img class="thumbnail" src="https://www.dropbox.com/scl/fi/bwglge0da9uhg9detpypf/kuaizhou-11__jtvdessy__2.jpg?rlkey=ug75fs5plgvvg30g29smnili1&st=ymq32l4z&raw=1" alt="Point 3">
         <div id="box-3" class="info-box">
             <span class="close-btn" onclick="event.stopPropagation(); toggleBox(3)">×</span>
+            <h3>Winning the carrier rocket slot</h3>
+            <p>The EPFL Spacecraft Team has won the space university cubesat challenge which came with a free launch opportunity aboard ExPace KUAIZHOU-11 launcher.</p>
+        </div>
+    </div>
+
+    <!-- Node 4: Bunny launch (was Node 3) -->
+    <div class="node" style="left: 38%; top: 22%;" onclick="toggleBox(4)">
+        <div class="date-label">January 2023</div>
+        <img class="thumbnail" src="https://www.dropbox.com/scl/fi/wy6gses50mo7hxk4ls1n5/2026-05-11-00.00.31.png?rlkey=zic94nfo445dxsohxtljtaatu&st=i287dwmv&raw=1" alt="Point 4">
+        <div id="box-4" class="info-box">
+            <span class="close-btn" onclick="event.stopPropagation(); toggleBox(4)">×</span>
             <h3>Bunny launch mission</h3>
             <p>Bunny, a prototype of the onboard computer, was the first proper mission by EST:
                 On January 31, the EPFL Spacecraft Team’s onboard computer Bunny was launched in California, USA,
@@ -318,12 +329,12 @@
         </div>
     </div>
 
-    <!-- Node 4: Twocan -->
-    <div class="node" style="left: 55%; top: 15%;" onclick="toggleBox(4)">
+    <!-- Node 5: Twocan (was Node 4) -->
+    <div class="node" style="left: 72%; top: 22%;" onclick="toggleBox(5)">
         <div class="date-label">January 2025</div>
-        <img class="thumbnail" src="https://www.dropbox.com/scl/fi/anqbc3d2lr7qxj1ijtckl/general.png?rlkey=yiam3ygb1qd270x126ipy8ntq&st=p0oq4xiu&raw=1" alt="Point 4">
-        <div id="box-4" class="info-box">
-            <span class="close-btn" onclick="event.stopPropagation(); toggleBox(4)">×</span>
+        <img class="thumbnail" src="https://www.dropbox.com/scl/fi/anqbc3d2lr7qxj1ijtckl/general.png?rlkey=yiam3ygb1qd270x126ipy8ntq&st=p0oq4xiu&raw=1" alt="Point 5">
+        <div id="box-5" class="info-box">
+            <span class="close-btn" onclick="event.stopPropagation(); toggleBox(5)">×</span>
             <h3>Twocan computer</h3>
             <p>Twocan is our last onboard computer that was flown in January 2025 and is still orbiting Earth right now.
                 Learning from the flaws of Bunny, Twocan aims to provide a more powerful and redundant onboard computer.
@@ -332,38 +343,23 @@
         </div>
     </div>
 
-    <!-- Node 5: CDR -->
-    <div class="node" style="left: 72%; top: 22%;" onclick="toggleBox(5)">
-        <div class="date-label">April 2026</div>
-        <img class="thumbnail" src="https://www.dropbox.com/scl/fi/1dvq2hyqe0u0buygnvqet/IMGP7150.jpg?rlkey=dql304suo0ciimkxnm989gsry&st=s3mdxzxz&raw=1" alt="Point 5">
-        <div id="box-5" class="info-box">
-            <span class="close-btn" onclick="event.stopPropagation(); toggleBox(5)">×</span>
-            <h3>Critical design review and testing stage</h3>
-            <p>After completing the design phase and the critical design review in April 2026,
-                EST is ready to move on to the next phase in the journey, which is the testing and building
-                stage of the satellite. The team has a lot to do within this 1 year window before launch, including finalising
-                the prototype and constructing fully functional systems that are well-supported and tested to the maximum.
-            </p>
-        </div>
-    </div>
-
-    <!-- Node 6: Launch -->
-    <div class="node" style="left: 88%; top: 15%;" onclick="toggleBox(6)">
+    <!-- Node 7: Launch (was Node 6) — bottom-right -->
+    <div class="node" style="left: 88%; top: 72%;" onclick="toggleBox(7)">
         <div class="date-label">2027</div>
-        <img class="thumbnail" src="https://www.dropbox.com/scl/fi/h0bewetpa0pnto2axufap/2026-03-27-00.52.26.png?rlkey=ttd359ww098s4xhbf9en0r0el&st=hngk5cpv&raw=1" alt="Point 6">
-        <div id="box-6" class="info-box">
-            <span class="close-btn" onclick="event.stopPropagation(); toggleBox(6)">×</span>
+        <img class="thumbnail" src="https://www.dropbox.com/scl/fi/h0bewetpa0pnto2axufap/2026-03-27-00.52.26.png?rlkey=ttd359ww098s4xhbf9en0r0el&st=hngk5cpv&raw=1" alt="Point 7">
+        <div id="box-7" class="info-box" style="top: auto; bottom: 70px; transform: translate(-50%, 0);">
+            <span class="close-btn" onclick="event.stopPropagation(); toggleBox(7)">×</span>
             <h3>Launching of our CHESS satellite into space!</h3>
             <p>The final version of the satellite is assembled and placed onto the carrier rocket, ready for its grand entry launch into the Exosphere.</p>
         </div>
     </div>
 
-    <!-- Node 7: Future -->
-    <div class="node" style="left: 72%; top: 78%;" onclick="toggleBox(7)">
+    <!-- Node 8: Future (was Node 7) -->
+    <div class="node" style="left: 55%; top: 78%;" onclick="toggleBox(8)">
         <div class="date-label">2027++</div>
-        <img class="thumbnail" src="https://www.dropbox.com/scl/fi/dpytqretdr0p42erh417h/pull_2.svg?rlkey=0buw4vw6kb1ldz2nwnx0swwh3&st=7pchye59&raw=1" alt="Point 7">
-        <div id="box-7" class="info-box" style="top: auto; bottom: 70px; transform: translate(-50%, 0);">
-            <span class="close-btn" onclick="event.stopPropagation(); toggleBox(7)">×</span>
+        <img class="thumbnail" src="https://www.dropbox.com/scl/fi/dpytqretdr0p42erh417h/pull_2.svg?rlkey=0buw4vw6kb1ldz2nwnx0swwh3&st=7pchye59&raw=1" alt="Point 8">
+        <div id="box-8" class="info-box" style="top: auto; bottom: 70px; transform: translate(-50%, 0);">
+            <span class="close-btn" onclick="event.stopPropagation(); toggleBox(8)">×</span>
             <h3>Future?</h3>
             <p>The CHESS journey will continue with Pathfinder 1 and Pathfinder 2, to form a constellation of scientific
                 satellites orbiting Earth in different orbits. This is an ambitious project that will span over half a decade,
@@ -382,8 +378,18 @@
         </div>
     </div>
 
+        <!-- Speech Bubble: 87 members -->
+    <div class="speech-bubble point-up" style="left: 90%; top: 45%;" onclick="toggleBox(103)">
+        87
+        <div id="box-103" class="info-box" style="top: auto; bottom: 70px; transform: translate(-50%, 0);">
+            <span class="close-btn" onclick="event.stopPropagation(); toggleBox(103)">×</span>
+            <h3>...members across 11 departments</h3>
+            <p>and still growing...</p>
+        </div>
+    </div>
+
     <!-- Speech Bubble: Today -->
-    <div class="speech-bubble point-down label-red" style="left: 80%; top: 14%;" onclick="toggleBox(102)">
+    <div class="speech-bubble point-down label-red" style="left: 90%; top: 22%;" onclick="toggleBox(102)">
         Today
         <div id="box-102" class="info-box">
             <span class="close-btn" onclick="event.stopPropagation(); toggleBox(102)">×</span>
@@ -394,18 +400,25 @@
         </div>
     </div>
 
-    <!-- Speech Bubble: 87 members -->
-    <div class="speech-bubble point-up" style="left: 80%; top: 22%;" onclick="toggleBox(103)">
-        87
-        <div id="box-103" class="info-box" style="top: auto; bottom: 70px; transform: translate(-50%, 0);">
-            <span class="close-btn" onclick="event.stopPropagation(); toggleBox(103)">×</span>
-            <h3>...members across 11 departments</h3>
-            <p>and still growing...</p>
+        <!-- Node 6: CDR (was Node 5) -->
+    <div class="node" style="left: 88%; top: 15%;" onclick="toggleBox(6)">
+        <div class="date-label">April 2026</div>
+        <img class="thumbnail" src="https://www.dropbox.com/scl/fi/1dvq2hyqe0u0buygnvqet/IMGP7150.jpg?rlkey=dql304suo0ciimkxnm989gsry&st=s3mdxzxz&raw=1" alt="Point 6">
+        <div id="box-6" class="info-box">
+            <span class="close-btn" onclick="event.stopPropagation(); toggleBox(6)">×</span>
+            <h3>Critical design review and testing stage</h3>
+            <p>After completing the design phase and the critical design review in April 2026,
+                EST is ready to move on to the next phase in the journey, which is the testing and building
+                stage of the satellite. The team has a lot to do within this 1 year window before launch, including finalising
+                the prototype and constructing fully functional systems that are well-supported and tested to the maximum.
+            </p>
         </div>
     </div>
 
+
+
     <!-- Slingshot Launcher -->
-    <div style="position: absolute; left: 38%; top: 72%; transform: translate(-50%, -50%); text-align: center; z-index: 10;">
+    <div style="position: absolute; left: 20%; top: 75%; transform: translate(-50%, -50%); text-align: center; z-index: 10;">
         <div style="color: var(--glow-color); font-weight: bold; font-size: 1rem; margin-bottom: 4px; text-shadow: 0 0 12px var(--glow-color); letter-spacing: 1px;">Launch the rocket!</div>
         <div id="slingshot-wrap">
             <canvas id="slingshotCanvas" width="200" height="280"></canvas>
