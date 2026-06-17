@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects - Pengyue Wang</title>
+    <link href="./bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico?">
+    <script src="./bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background-color: #0b0e14;
+            color: white;
+            margin: 0;
+            overflow-x: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .navbar {
+            z-index: 1000;
+            background: rgba(11, 14, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .projects-container {
+            padding-top: 150px;
+            padding-bottom: 100px;
+            min-height: 100vh;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            overflow: hidden;
+            text-decoration: none;
+            color: white;
+            display: block;
+            height: 100%;
+            transition: all .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255,255,255,0.3);
+            color: white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .project-banner {
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .project-banner.continuum { background: linear-gradient(135deg, #1864ab, #4dabf7); }
+        .project-banner.musicml { background: linear-gradient(135deg, #5f3dc4, #ae3ec9); }
+
+        .project-body { padding: 28px; }
+
+        .badge-status {
+            font-size: .7rem;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 6px;
+        }
+
+        .badge-live { background: rgba(32, 201, 151, 0.18); color: #20c997; }
+        .badge-progress { background: rgba(255, 193, 7, 0.18); color: #ffc107; }
+
+        .more-soon {
+            border: 1px dashed rgba(255,255,255,0.15);
+            border-radius: 18px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: rgba(255,255,255,0.4);
+            text-align: center;
+            padding: 28px;
+            min-height: 280px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">Pengyue Wang / 王鹏越</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item fs-2 px-2"><a class="nav-link" href="index.html#about">About</a></li>
+                    <li class="nav-item fs-2 px-2"><a class="nav-link" href="projects.html">Projects</a></li>
+                    <li class="nav-item fs-2 px-2"><a class="nav-link" href="index.html#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="container projects-container">
+        <div class="text-center mb-5">
+            <h1 class="display-3 fw-bold">My <span class="text-success">Projects</span></h1>
+            <p class="lead">Things I'm building, shipping, and training.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <a href="projects/continuum.html" class="project-card">
+                    <div class="project-banner continuum">🧹</div>
+                    <div class="project-body">
+                        <span class="badge-status badge-live">Available now</span>
+                        <h3 class="fw-bold mt-3">Continuum</h3>
+                        <p style="color: rgba(255,255,255,0.7);">A free, native macOS control center for cleaning, disk visualization, security scanning, hardware telemetry and app management. No ads, no trackers, no subscriptions.</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <a href="projects/music-ml.html" class="project-card">
+                    <div class="project-banner musicml">🎹</div>
+                    <div class="project-body">
+                        <span class="badge-status badge-progress">In development</span>
+                        <h3 class="fw-bold mt-3">Composer-Conditioned Music Generation</h3>
+                        <p style="color: rgba(255,255,255,0.7);">A decoder-only transformer trained from scratch on 68 classical composers, conditioned on music theory, with natural-language prompting planned next.</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <div class="more-soon">
+                    <div class="fs-1 mb-2">✨</div>
+                    <div>More projects coming soon.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const particleCount = 100;
+        const connectionDistance = 150;
+
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    size: 2
+                });
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    let p2 = particles[j];
+                    let dx = p.x - p2.x;
+                    let dy = p.y - p2.y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < connectionDistance) {
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${1 - dist / connectionDistance})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', init);
+        init();
+        animate();
+    </script>
+</body>
+</html>

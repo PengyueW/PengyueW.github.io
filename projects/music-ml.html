@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Composer-Conditioned Music Generation — Pengyue Wang</title>
+    <meta name="description" content="An in-development transformer model that generates original piano music in the style of 68 classical composers, grounded in real music theory.">
+    <link href="../bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico?">
+    <script src="../bootstrap.bundle.min.js"></script>
+    <style>
+        :root {
+            --m-violet-1: #5f3dc4;
+            --m-violet-2: #ae3ec9;
+            --m-pink: #e64980;
+            --m-glow: rgba(174, 62, 201, 0.35);
+        }
+
+        body {
+            background-color: #07060c;
+            color: white;
+            margin: 0;
+            overflow-x: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .navbar {
+            font-family: "Cabin Sketch", cursive;
+            z-index: 1000;
+            background: rgba(7, 6, 12, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .navbar-brand, .nav-link { padding: 10px 15px !important; }
+
+        /* ---------- Hero ---------- */
+        #hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 140px 20px 100px;
+            background:
+                radial-gradient(circle at 50% 12%, var(--m-glow), transparent 50%),
+                linear-gradient(180deg, #07060c 0%, #140d22 55%, #07060c 100%);
+        }
+
+        .eq-bars {
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            height: 240px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 6px;
+            opacity: 0.35;
+            mask-image: linear-gradient(180deg, transparent, rgba(0,0,0,0.9));
+            -webkit-mask-image: linear-gradient(180deg, transparent, rgba(0,0,0,0.9));
+            pointer-events: none;
+        }
+
+        .eq-bar {
+            width: 8px;
+            border-radius: 4px 4px 0 0;
+            background: linear-gradient(180deg, var(--m-pink), var(--m-violet-2), var(--m-violet-1));
+            animation: eq 1.6s ease-in-out infinite;
+        }
+
+        @keyframes eq {
+            0%, 100% { transform: scaleY(0.25); }
+            50% { transform: scaleY(1); }
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 760px;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 193, 7, 0.12);
+            border: 1px solid rgba(255, 193, 7, 0.4);
+            color: #ffc107;
+            border-radius: 999px;
+            padding: 7px 18px;
+            font-size: .8rem;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 26px;
+        }
+
+        .status-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #ffc107;
+            animation: pulse 1.4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(255,193,7,0.5); }
+            50% { opacity: .6; box-shadow: 0 0 0 6px rgba(255,193,7,0); }
+        }
+
+        .hero-inner h1 {
+            font-weight: 800;
+            font-size: 3rem;
+            line-height: 1.15;
+            margin-bottom: 18px;
+            background: linear-gradient(135deg, #fff, #e3c9ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-tagline {
+            font-size: 1.25rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 8px;
+        }
+
+        .hero-sub {
+            color: rgba(255,255,255,0.5);
+            font-size: .95rem;
+        }
+
+        /* ---------- Sections ---------- */
+        .section-wrap { padding: 100px 0; }
+
+        .section-eyebrow {
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            font-size: .8rem;
+            color: var(--m-violet-2);
+            font-weight: 600;
+        }
+
+        /* Roadmap */
+        .roadmap-item {
+            display: flex;
+            gap: 22px;
+            position: relative;
+            padding-bottom: 46px;
+        }
+
+        .roadmap-item:last-child { padding-bottom: 0; }
+
+        .roadmap-rail {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 0 0 auto;
+        }
+
+        .roadmap-dot {
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 4px;
+            border: 3px solid #07060c;
+            box-shadow: 0 0 0 2px rgba(255,255,255,0.15);
+        }
+
+        .roadmap-dot.done { background: #20c997; box-shadow: 0 0 0 2px #20c997; }
+        .roadmap-dot.current { background: #ffc107; box-shadow: 0 0 0 2px #ffc107; animation: pulse 1.4s ease-in-out infinite; }
+        .roadmap-dot.planned { background: transparent; box-shadow: 0 0 0 2px rgba(255,255,255,0.25); }
+
+        .roadmap-line {
+            flex: 1;
+            width: 2px;
+            background: rgba(255,255,255,0.12);
+            margin-top: 6px;
+        }
+
+        .roadmap-item:last-child .roadmap-line { display: none; }
+
+        .roadmap-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 24px 28px;
+            flex: 1;
+        }
+
+        .roadmap-card.current { border-color: rgba(255,193,7,0.4); background: rgba(255,193,7,0.05); }
+
+        .phase-badge {
+            font-size: .68rem;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .phase-badge.done { background: rgba(32,201,151,0.18); color: #20c997; }
+        .phase-badge.current { background: rgba(255,193,7,0.18); color: #ffc107; }
+        .phase-badge.planned { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.55); }
+
+        .roadmap-card h3 { font-weight: 700; margin-bottom: 6px; }
+        .roadmap-card ul { color: rgba(255,255,255,0.65); font-size: .92rem; margin-bottom: 0; padding-left: 1.2rem; }
+        .roadmap-card ul li { margin-bottom: 4px; }
+
+        /* Architecture highlight cards */
+        .arch-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 28px;
+            height: 100%;
+            transition: all .3s ease;
+        }
+
+        .arch-card:hover {
+            border-color: rgba(174,62,201,0.4);
+            transform: translateY(-6px);
+            background: rgba(174,62,201,0.06);
+        }
+
+        .arch-icon { font-size: 2.2rem; margin-bottom: 14px; display: block; }
+        .arch-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 8px; }
+        .arch-desc { color: rgba(255,255,255,0.6); font-size: .9rem; }
+
+        /* Outcome */
+        .outcome-banner {
+            background: linear-gradient(135deg, rgba(95,61,196,0.18), rgba(174,62,201,0.08));
+            border: 1px solid rgba(174,62,201,0.25);
+            border-radius: 22px;
+            padding: 50px;
+        }
+
+        .stat-pill {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 14px;
+            padding: 18px 22px;
+            text-align: center;
+        }
+
+        .stat-num { font-size: 1.8rem; font-weight: 800; color: var(--m-pink); }
+        .stat-label { font-size: .8rem; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: .05em; }
+
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            color: rgba(255,255,255,0.4);
+            font-size: .85rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        footer a { color: rgba(255,255,255,0.6); }
+
+        @media (max-width: 576px) {
+            .hero-inner h1 { font-size: 2.1rem; }
+            .roadmap-item { gap: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">Pengyue Wang / 王鹏越</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item fs-2 px-2"><a class="nav-link" href="../index.html#about">About</a></li>
+                    <li class="nav-item fs-2 px-2"><a class="nav-link" href="../projects.html">Projects</a></li>
+                    <li class="nav-item fs-2 px-2"><a class="nav-link" href="../index.html#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section id="hero">
+        <div class="eq-bars" id="eqBars"></div>
+        <div class="hero-inner">
+            <div class="status-pill"><span class="status-dot"></span> In Development · Phase 1.5</div>
+            <h1>Composer-Conditioned Music Generation</h1>
+            <p class="hero-tagline">Teaching a neural network to compose like the masters — grounded in real music theory, not just pattern-matching.</p>
+            <p class="hero-sub">A decoder-only transformer trained from scratch on 68 classical composers. This page tracks an active research project, not a finished product yet.</p>
+        </div>
+    </section>
+
+    <section class="section-wrap">
+        <div class="container">
+            <div class="section-eyebrow mb-2">The idea</div>
+            <h2 class="display-5 fw-bold mb-4">What it's meant to become</h2>
+            <p class="lead" style="color: rgba(255,255,255,0.75); max-width: 760px;">
+                The goal is a model you can hand a composer name — or eventually a plain-English
+                description — and get back an original piece of piano music that genuinely sounds
+                like it belongs to that style: correct harmonic language, idiomatic cadences, and
+                the phrasing quirks that distinguish Bach from Debussy. Not a remix of training
+                data, and not generic "AI piano" — music shaped by the same theory a human composer
+                would have learned.
+            </p>
+        </div>
+    </section>
+
+    <section class="section-wrap" style="background: rgba(255,255,255,0.015);">
+        <div class="container">
+            <div class="section-eyebrow mb-2">Progress</div>
+            <h2 class="display-5 fw-bold mb-5">Roadmap</h2>
+
+            <div class="roadmap-item">
+                <div class="roadmap-rail">
+                    <div class="roadmap-dot done"></div>
+                    <div class="roadmap-line"></div>
+                </div>
+                <div class="roadmap-card">
+                    <span class="phase-badge done">Phase 1 · Complete</span>
+                    <h3>Composer-Conditioned Foundation</h3>
+                    <ul>
+                        <li>Decoder-only transformer (GPT-style) trained from scratch — 6 layers, 512-dim, 8 heads</li>
+                        <li>Trained on MAESTRO + GiantMIDI, merged into 68 labelled composers</li>
+                        <li>150 epochs completed on a Kaggle T4 GPU</li>
+                        <li>Generates autoregressive piano performances conditioned on composer style</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="roadmap-item">
+                <div class="roadmap-rail">
+                    <div class="roadmap-dot current"></div>
+                    <div class="roadmap-line"></div>
+                </div>
+                <div class="roadmap-card current">
+                    <span class="phase-badge current">Phase 1.5 · In Progress</span>
+                    <h3>Music Theory &amp; Era Conditioning</h3>
+                    <ul>
+                        <li>Auxiliary key/chord prediction heads grounded in real harmonic analysis</li>
+                        <li>A 6-era embedding (Baroque → Modern) so the model generalizes era-level style, not just 68 isolated composers</li>
+                        <li>Per-composer sampling constraints — e.g. strict dominant resolution for Bach, permitted parallel fifths for Debussy — encoded from an 8,000-line music theory reference covering all 68 composers</li>
+                        <li>Next up: run the fine-tuning pass and evaluate in-key rate, harmonic consistency, and per-composer style accuracy</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="roadmap-item">
+                <div class="roadmap-rail">
+                    <div class="roadmap-dot planned"></div>
+                    <div class="roadmap-line"></div>
+                </div>
+                <div class="roadmap-card">
+                    <span class="phase-badge planned">Phase 2 · Planned</span>
+                    <h3>Natural-Language Prompting</h3>
+                    <ul>
+                        <li>A text encoder so a prompt like "a melancholic waltz in the style of Chopin" can steer generation</li>
+                        <li>Moves beyond a fixed composer dropdown toward free-form creative direction</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="roadmap-item">
+                <div class="roadmap-rail">
+                    <div class="roadmap-dot planned"></div>
+                </div>
+                <div class="roadmap-card">
+                    <span class="phase-badge planned">Phase 3 · Planned</span>
+                    <h3>Multi-Instrument</h3>
+                    <ul>
+                        <li>Extend from solo piano to small ensembles</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap">
+        <div class="container">
+            <div class="section-eyebrow mb-2">Under the hood</div>
+            <h2 class="display-5 fw-bold mb-5">How it's built</h2>
+            <div class="row g-4">
+                <div class="col-md-4 col-sm-6">
+                    <div class="arch-card">
+                        <span class="arch-icon">🧠</span>
+                        <div class="arch-title">Decoder-only Transformer</div>
+                        <div class="arch-desc">GPT-style autoregressive model over a 392-token musical event vocabulary — note on/off, timing, and velocity — with tied embeddings and pre-norm attention.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="arch-card">
+                        <span class="arch-icon">🎼</span>
+                        <div class="arch-title">68 Composers, 6 Eras</div>
+                        <div class="arch-desc">Every piece is tagged by composer and grouped into one of six musical eras, from Baroque to Modern/Atonal, so style is learned at two levels of granularity.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="arch-card">
+                        <span class="arch-icon">📐</span>
+                        <div class="arch-title">Theory-Grounded Losses</div>
+                        <div class="arch-desc">Auxiliary key and chord prediction heads — supervised with real music-theory labels extracted via music21 — keep the model honest about harmony, not just note statistics.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="arch-card">
+                        <span class="arch-icon">✍️</span>
+                        <div class="arch-title">Per-Composer Constraints</div>
+                        <div class="arch-desc">Sampling-time rules — in-key bias, parallel-fifth handling, augmented-second use, cadence preference — tuned individually for all 68 composers.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="arch-card">
+                        <span class="arch-icon">🔬</span>
+                        <div class="arch-title">8,000-Line Theory Reference</div>
+                        <div class="arch-desc">A from-scratch counterpoint &amp; harmony reference plus individual style profiles for every composer in the dataset — the specification the model's constraints are built from.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="arch-card">
+                        <span class="arch-icon">⚙️</span>
+                        <div class="arch-title">Frozen-Backbone Fine-Tuning</div>
+                        <div class="arch-desc">The 150 epochs of base note statistics are frozen during theory fine-tuning, so new conditioning signals are learned without erasing what already works.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap" style="background: rgba(255,255,255,0.015);">
+        <div class="container">
+            <div class="outcome-banner">
+                <div class="section-eyebrow mb-2">Where this is headed</div>
+                <h2 class="fw-bold mb-3">The planned outcome</h2>
+                <p class="lead mb-4" style="color: rgba(255,255,255,0.78); max-width: 760px;">
+                    A model that can generate an original piano piece on demand — pick a composer
+                    (or, eventually, describe a mood and style in plain English) and get back music
+                    that respects real harmonic rules while still sounding like that composer's
+                    voice. No piece copied from the training set; every output freshly sampled,
+                    theory-aware, and stylistically distinct from the next composer's output.
+                </p>
+                <div class="row g-3">
+                    <div class="col-6 col-md-3">
+                        <div class="stat-pill"><div class="stat-num">68</div><div class="stat-label">Composers</div></div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-pill"><div class="stat-num">6</div><div class="stat-label">Musical Eras</div></div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-pill"><div class="stat-num">150</div><div class="stat-label">Epochs Trained</div></div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-pill"><div class="stat-num">4</div><div class="stat-label">Planned Phases</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <a href="../projects.html">← Back to all projects</a>
+        <div class="mt-2">&copy; <span id="year"></span> Pengyue Wang.</div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        const eq = document.getElementById('eqBars');
+        const barCount = 48;
+        for (let i = 0; i < barCount; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'eq-bar';
+            const h = 40 + Math.random() * 200;
+            bar.style.height = h + 'px';
+            bar.style.animationDelay = (Math.random() * 1.6).toFixed(2) + 's';
+            bar.style.animationDuration = (1.1 + Math.random() * 1.2).toFixed(2) + 's';
+            eq.appendChild(bar);
+        }
+    </script>
+</body>
+</html>

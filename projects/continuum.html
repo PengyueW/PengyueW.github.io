@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Continuum — Pengyue Wang</title>
+    <meta name="description" content="Continuum — a free, native macOS control center for cleaning, disk visualization, security scanning, and hardware telemetry. No ads, no trackers.">
+    <link href="../bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico?">
+    <script src="../bootstrap.bundle.min.js"></script>
+    <style>
+        :root {
+            --c-blue-1: #1864ab;
+            --c-blue-2: #4dabf7;
+            --c-glow: rgba(77, 171, 247, 0.35);
+        }
+
+        body {
+            background-color: #06090f;
+            color: white;
+            margin: 0;
+            overflow-x: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .navbar {
+            z-index: 1000;
+            font-family: "Cabin Sketch", cursive;
+            background: rgba(6, 9, 15, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .navbar-brand, .nav-link { padding: 10px 15px !important; }
+
+        /* ---------- Hero ---------- */
+        #hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 140px 20px 80px;
+            background:
+                radial-gradient(circle at 50% 18%, var(--c-glow), transparent 45%),
+                linear-gradient(180deg, #06090f 0%, #0a1322 55%, #06090f 100%);
+        }
+
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(77,171,247,0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(77,171,247,0.06) 1px, transparent 1px);
+            background-size: 48px 48px;
+            mask-image: radial-gradient(circle at 50% 30%, rgba(0,0,0,0.9), transparent 70%);
+            -webkit-mask-image: radial-gradient(circle at 50% 30%, rgba(0,0,0,0.9), transparent 70%);
+        }
+
+        .scan-line {
+            position: absolute;
+            left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(77,171,247,0.8), transparent);
+            animation: scan 5s linear infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes scan {
+            0% { top: 10%; opacity: 0; }
+            10% { opacity: .7; }
+            90% { opacity: .7; }
+            100% { top: 95%; opacity: 0; }
+        }
+
+        .hero-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 720px;
+        }
+
+        .app-icon {
+            width: 148px;
+            height: 148px;
+            border-radius: 32px;
+            filter: drop-shadow(0 20px 50px var(--c-glow));
+            margin-bottom: 28px;
+            animation: float 5s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .eyebrow-pill {
+            display: inline-block;
+            background: rgba(77,171,247,0.12);
+            border: 1px solid rgba(77,171,247,0.35);
+            color: var(--c-blue-2);
+            border-radius: 999px;
+            padding: 6px 18px;
+            font-size: .8rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 22px;
+        }
+
+        .hero-inner h1 {
+            font-weight: 800;
+            font-size: 3.4rem;
+            margin-bottom: 14px;
+        }
+
+        .hero-tagline {
+            font-size: 1.3rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 36px;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, var(--c-blue-1), var(--c-blue-2));
+            border: none;
+            color: white;
+            font-weight: 700;
+            font-size: 1.15rem;
+            padding: 16px 44px;
+            border-radius: 14px;
+            box-shadow: 0 14px 34px rgba(24,100,171,0.45);
+            transition: transform .25s ease, box-shadow .25s ease;
+            display: inline-block;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 42px rgba(24,100,171,0.6);
+            color: white;
+        }
+
+        .download-meta {
+            margin-top: 14px;
+            color: rgba(255,255,255,0.5);
+            font-size: .9rem;
+        }
+
+        .hash-row {
+            margin-top: 26px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            padding: 10px 10px 10px 18px;
+            font-family: "SF Mono", Menlo, Consolas, monospace;
+            font-size: .82rem;
+            color: rgba(255,255,255,0.75);
+            max-width: 100%;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hash-label {
+            color: rgba(255,255,255,0.4);
+            font-family: -apple-system, sans-serif;
+            font-size: .72rem;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+        }
+
+        .btn-copy {
+            background: rgba(77,171,247,0.18);
+            border: 1px solid rgba(77,171,247,0.4);
+            color: var(--c-blue-2);
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: .78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-copy:hover { background: rgba(77,171,247,0.3); }
+        .btn-copy.copied { background: rgba(32,201,151,0.25); border-color: #20c997; color: #20c997; }
+
+        /* ---------- Sections ---------- */
+        .section-wrap { padding: 100px 0; }
+
+        .section-eyebrow {
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            font-size: .8rem;
+            color: var(--c-blue-2);
+            font-weight: 600;
+        }
+
+        .free-banner {
+            background: linear-gradient(135deg, rgba(24,100,171,0.18), rgba(77,171,247,0.08));
+            border: 1px solid rgba(77,171,247,0.25);
+            border-radius: 22px;
+            padding: 50px;
+            text-align: center;
+        }
+
+        .free-pill-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 26px; }
+
+        .free-pill {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 999px;
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: .95rem;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 28px;
+            height: 100%;
+            transition: all .3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(77,171,247,0.4);
+            transform: translateY(-6px);
+            background: rgba(77,171,247,0.06);
+        }
+
+        .feature-icon { font-size: 2.2rem; margin-bottom: 14px; display: block; }
+        .feature-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 8px; }
+        .feature-desc { color: rgba(255,255,255,0.6); font-size: .92rem; }
+
+        .req-table {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 10px 30px;
+        }
+
+        .req-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .req-row:last-child { border-bottom: none; }
+        .req-key { color: rgba(255,255,255,0.5); }
+        .req-val { font-weight: 600; text-align: right; }
+
+        .honesty-note {
+            border-left: 3px solid var(--c-blue-2);
+            padding: 18px 24px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 0 14px 14px 0;
+            color: rgba(255,255,255,0.7);
+            font-size: .95rem;
+        }
+
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            color: rgba(255,255,255,0.4);
+            font-size: .85rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        footer a { color: rgba(255,255,255,0.6); }
+
+        @media (max-width: 576px) {
+            .hero-inner h1 { font-size: 2.3rem; }
+            .hash-row { font-size: .68rem; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">Pengyue Wang / 王鹏越</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item fs-2 px-2"><a class="nav-link" href="../index.html#about">About</a></li>
+                    <li class="nav-item fs-2 px-2"><a class="nav-link" href="../projects.html">Projects</a></li>
+                    <li class="nav-item fs-2 px-2"><a class="nav-link" href="../index.html#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section id="hero">
+        <div class="hero-grid"></div>
+        <div class="scan-line"></div>
+        <div class="hero-inner">
+            <img src="continuum/icon.png" alt="Continuum app icon" class="app-icon">
+            <h1>Continuum</h1>
+            <div class="eyebrow-pill">macOS App · v1.0.0</div>
+            <p class="hero-tagline">See it. Clean it. Secure it. Know your Mac.</p>
+
+            <a href="continuum/Continuum-1.0.0.dmg" class="btn-download" download>⬇ Download for macOS</a>
+            <div class="download-meta">v1.0.0 &nbsp;·&nbsp; 1.6 MB &nbsp;·&nbsp; macOS 13+ &nbsp;·&nbsp; Apple Silicon &amp; Intel</div>
+
+            <div>
+                <div class="hash-row">
+                    <span class="hash-label">MD5</span>
+                    <span id="md5hash">f0ccf1f69cb9fbbbf7c6b51ca9b315f5</span>
+                    <button class="btn-copy" id="copyBtn" onclick="copyHash()">Copy</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap">
+        <div class="container">
+            <div class="free-banner">
+                <h2 class="fw-bold mb-2">100% Free. No Catch.</h2>
+                <p class="lead mb-0" style="color: rgba(255,255,255,0.75);">No ads. No trackers or telemetry phoning home. No subscriptions, sign-ups, or feature paywalls.</p>
+                <div class="free-pill-row">
+                    <span class="free-pill">🚫 No ads</span>
+                    <span class="free-pill">🚫 No trackers</span>
+                    <span class="free-pill">🚫 No sign-up</span>
+                    <span class="free-pill">🚫 No subscription</span>
+                    <span class="free-pill">✅ Free for personal use</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap" style="background: rgba(255,255,255,0.015); padding-top: 60px;">
+        <div class="container">
+            <div class="section-eyebrow mb-2">What it does</div>
+            <h2 class="display-5 fw-bold mb-3">One app. Every corner of your Mac.</h2>
+            <p class="lead mb-5" style="color: rgba(255,255,255,0.7); max-width: 720px;">
+                Continuum is a single, self-contained native app spanning cleaning, disk
+                visualization, security, privacy, app management, and deep hardware telemetry —
+                so you don't need eight separate utilities (or a subscription to each one).
+            </p>
+
+            <div class="row g-4">
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">🧹</span>
+                        <div class="feature-title">Cleaner</div>
+                        <div class="feature-desc">Scans whitelisted caches, logs, DerivedData and orphaned app support for reclaimable space. Previews everything and moves to Trash — never hard-deletes.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">🗺️</span>
+                        <div class="feature-title">Disk Map</div>
+                        <div class="feature-desc">An interactive treemap of any folder or volume. Click to zoom, double-click to reveal in Finder, with an optional admin-scan for root-owned files.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">🛡️</span>
+                        <div class="feature-title">Security Scanner</div>
+                        <div class="feature-desc">Malware / adware / spyware scanning across three tiers — standard, deep, forensic — with reversible quarantine, never permanent deletion.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">🗑️</span>
+                        <div class="feature-title">Smart Uninstaller</div>
+                        <div class="feature-desc">Finds every on-disk trace of an app — bundle, launch agents, app support, caches, container data — and removes only what you choose.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">🔌</span>
+                        <div class="feature-title">Extensions &amp; Permissions</div>
+                        <div class="feature-desc">Review and toggle extensions, login items, and launch agents in one dashboard. See exactly which apps hold camera, mic, or full-disk access.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">📡</span>
+                        <div class="feature-title">Network Monitor</div>
+                        <div class="feature-desc">A reverse firewall that surfaces outbound connections in real time and blocks unauthorized hosts via a dedicated pf anchor.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">🔥</span>
+                        <div class="feature-title">Shredder &amp; Free-Space Wipe</div>
+                        <div class="feature-desc">Multi-pass secure erase for sensitive files, plus a free-space wipe that overwrites unused blocks so deleted files can't be recovered — live data is never touched.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">🌡️</span>
+                        <div class="feature-title">Hardware &amp; Battery</div>
+                        <div class="feature-desc">Every SMC temperature sensor, live fan RPM and custom fan curves, plus battery health, cycle count, and live charge/discharge wattage.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">📊</span>
+                        <div class="feature-title">Drive Health &amp; Sensors</div>
+                        <div class="feature-desc">NVMe S.M.A.R.T. data and lifetime terabytes written, plus ambient light, lid angle and accelerometer readings with scriptable automations.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="honesty-note mt-5">
+                <i>Honest about its limits:</i> Not every Mac has every sensor, and some
+                hardware has no stable public API — Continuum says so in the UI instead of faking a
+                reading. The network monitor has no kernel filter entitlement, so it watches
+                established connections and enforces blocks via <code>pf</code> rather than claiming
+                packet-level interception.
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap">
+        <div class="container">
+            <div class="section-eyebrow mb-2">Before you install</div>
+            <h2 class="display-5 fw-bold mb-4">System requirements</h2>
+            <div class="req-table">
+                <div class="req-row"><span class="req-key">macOS version</span><span class="req-val">macOS 13 (Ventura) or later</span></div>
+                <div class="req-row"><span class="req-key">Architecture</span><span class="req-val">Apple Silicon &amp; Intel</span></div>
+                <div class="req-row"><span class="req-key">Permissions</span><span class="req-val">Full Disk Access (one-time grant, for cleaning &amp; security features)</span></div>
+                <div class="req-row"><span class="req-key">Sandboxing</span><span class="req-val">Not sandboxed — required for direct cache/disk access</span></div>
+                <div class="req-row"><span class="req-key">License</span><span class="req-val">CC BY-NC-SA 4.0 — free for personal, non-commercial use</span></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <a href="../projects.html">← Back to all projects</a>
+        <div class="mt-2">&copy; <span id="year"></span> Pengyue Wang.</div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        function copyHash() {
+            const hash = document.getElementById('md5hash').textContent.trim();
+            const btn = document.getElementById('copyBtn');
+
+            function showCopied() {
+                const original = btn.textContent;
+                btn.textContent = '✓ Copied';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = original;
+                    btn.classList.remove('copied');
+                }, 1800);
+            }
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(hash).then(showCopied);
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = hash;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showCopied();
+            }
+        }
+    </script>
+</body>
+</html>
