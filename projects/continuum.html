@@ -220,6 +220,43 @@
             font-size: .95rem;
         }
 
+        /* ---------- App Interface Gallery ---------- */
+        .gallery-item {
+            overflow: hidden;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.02);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            border-color: rgba(77, 171, 247, 0.4);
+            box-shadow: 0 12px 30px rgba(77, 171, 247, 0.15);
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-img:hover {
+            transform: scale(1.03);
+        }
+
+        .custom-modal-dark {
+            background-color: rgba(6, 9, 15, 0.96) !important;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        }
+
+        .custom-modal-dark .modal-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* ---------- Features ---------- */
         .feature-card {
             background: rgba(255,255,255,0.04);
             border: 1px solid rgba(255,255,255,0.1);
@@ -268,6 +305,15 @@
             font-size: .95rem;
         }
 
+        .language-note {
+            border-left: 3px solid var(--c-blue-1);
+            padding: 18px 24px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 0 14px 14px 0;
+            color: rgba(255,255,255,0.7);
+            font-size: .95rem;
+        }
+
         footer {
             padding: 40px 0;
             text-align: center;
@@ -308,7 +354,7 @@
         <div class="hero-inner">
             <img src="continuum/icon.png" alt="Continuum app icon" class="app-icon">
             <h1>Continuum</h1>
-            <div class="eyebrow-pill">macOS App · v1.0.0</div>
+            <div class="eyebrow-pill">macOS App · v1.0.2</div>
             <p class="hero-tagline">See it. Clean it. Secure it. Know your Mac.</p>
 
             <a href="continuum/Continuum-1.0.0.dmg" class="btn-download" download>⬇ Download for macOS</a>
@@ -324,17 +370,64 @@
         </div>
     </section>
 
+
     <section class="section-wrap">
         <div class="container">
             <div class="free-banner">
                 <h2 class="fw-bold mb-2">100% Free. No Catch.</h2>
-                <p class="lead mb-0" style="color: rgba(255,255,255,0.75);">No ads. No trackers or telemetry phoning home. No subscriptions, sign-ups, or feature paywalls.</p>
+                <p class="lead mb-0" style="color: rgba(255,255,255,0.75);">No ads. No trackers or telemetry phoning home. No subscriptions, sign-ups, or feature paywalls.</p>               
                 <div class="free-pill-row">
                     <span class="free-pill">🚫 No ads</span>
                     <span class="free-pill">🚫 No trackers</span>
                     <span class="free-pill">🚫 No sign-up</span>
                     <span class="free-pill">🚫 No subscription</span>
                     <span class="free-pill">✅ Free for personal use</span>
+                    <span class="free-pill">❤️ Relies only on donations</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap pb-2">
+        <div class="container">
+            <div class="honesty-note mt-5" style="color:azure; font-size: larger;">
+                Note: Since the app is not published on the Mac App Store, opening it the first time may prompt a security warning.
+                Open System Preferences -> Privacy & Security, you can give it permission to install properly.
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap pb-2">
+        <div class="container">
+            <div class="section-eyebrow mb-2">Interface Preview</div>
+            <h2 class="display-5 fw-bold mb-4">Take a look inside Continuum</h2>
+            <div class="row g-4">
+                <div class="col-12">
+                    <div class="gallery-item">
+                        <img src="../resources/images/homePage.png" alt="Main Control Center Dashboard Overview" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-12">
+                    <div class="gallery-item">
+                        <img src="../resources/images/diskMap.png" alt="Disk Visualization Dashboard" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="gallery-item">
+                        <img src="continuum/preview3.png" alt="Deep Cache & System Cleaner" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-12">
+                    <div class="gallery-item">
+                        <img src="continuum/preview4.png" alt="Advanced Security & Malware Scanner" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="gallery-item">
+                        <img src="continuum/preview5.png" alt="Live Hardware Telemetry & Sensors" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                    </div>
                 </div>
             </div>
         </div>
@@ -423,6 +516,24 @@
                 established connections and enforces blocks via <code>pf</code> rather than claiming
                 packet-level interception.
             </div>
+
+            <div class="language-note mt-5">
+                Supports application in native languages:                 
+                <div class="free-pill-row" style="color:azure">
+                    <span class="free-pill">English</span>
+                    <span class="free-pill">Español</span>
+                    <span class="free-pill">Français</span>
+                    <span class="free-pill">Deutsch</span>
+                    <span class="free-pill">Italiano</span>
+                    <span class="free-pill">Português</span>
+                    <span class="free-pill">Nederlands</span>
+                    <span class="free-pill">Русский</span>
+                    <span class="free-pill">日本語</span>
+                    <span class="free-pill">한국어</span>
+                    <span class="free-pill">简体中文</span>
+                    <span class="free-pill">繁體中文</span>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -444,6 +555,20 @@
         <a href="../projects.html">← Back to all projects</a>
         <div class="mt-2">&copy; <span id="year"></span> Pengyue Wang.</div>
     </footer>
+
+    <div class="modal fade" id="galleryModal" tabindex="-1" aria-labelledby="galleryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content custom-modal-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title text-white" id="galleryModalLabel">Screenshot Preview</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-2 text-center">
+                    <img src="" id="modalTargetImage" class="img-fluid rounded shadow" alt="Zoomed Screenshot">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
@@ -473,6 +598,21 @@
                 document.body.removeChild(ta);
                 showCopied();
             }
+        }
+
+        const galleryModal = document.getElementById('galleryModal');
+        if (galleryModal) {
+            galleryModal.addEventListener('show.bs.modal', function (event) {
+                const triggerImg = event.relatedTarget;
+                const sourceSrc = triggerImg.getAttribute('src');
+                const sourceAlt = triggerImg.getAttribute('alt');
+                
+                const targetImg = galleryModal.querySelector('#modalTargetImage');
+                const targetLabel = galleryModal.querySelector('#galleryModalLabel');
+                
+                targetImg.src = sourceSrc;
+                targetLabel.textContent = sourceAlt || "Screenshot Preview";
+            });
         }
     </script>
 </body>
