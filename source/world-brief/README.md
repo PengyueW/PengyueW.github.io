@@ -152,3 +152,13 @@ engineering judgement is mine:
 
 Note that the assistance is in the writing of this application, not in its running: World Brief
 itself calls no language model at all, at any point, by design.
+
+## License
+
+Copyright © 2026 Pengyue Wang.
+
+World Brief is licensed under the **Creative Commons
+Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)**
+license — see [`LICENSE`](LICENSE). You may share and adapt the work for
+**non-commercial** purposes, with attribution, and any derivatives must be
+shared under the same license.
