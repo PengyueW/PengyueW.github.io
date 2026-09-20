@@ -345,7 +345,7 @@
             <div class="app-icon">🏯</div>
             <h1>Historical Territories Timeline Map<span class="cn">华夏五千年 · 历史疆域时间地图</span></h1>
             <div class="eyebrow-pill">Zero-dependency static site</div>
-            <p class="hero-tagline">Drag a timeline from 8000 BCE to today across a real East-Asian map and watch every political entity's territory — dynasties, steppe empires, and their neighbours — rise, contract, and fall in place.</p>
+            <p class="hero-tagline">Drag a timeline from 8000 BCE to today across a real East-Asian map and watch every political entity's territory (dynasties, steppe empires, and their neighbours) rise, contract, and fall in place.</p>
 
             <a href="china-map/index.html" class="btn-launch">🗺️ Launch the Map</a>
             <div class="launch-meta">No install &nbsp;·&nbsp; No build step &nbsp;·&nbsp; Runs entirely in the browser</div>
@@ -355,8 +355,13 @@
     <section class="section-wrap">
         <div class="container">
             <div class="free-banner">
-                <h2 class="fw-bold mb-2">137 polities. 200+ boundary keyframes.</h2>
-                <p class="lead mb-0" style="color: rgba(255,255,255,0.75);">Centred on the successive Central Plains dynasties, with the major surrounding powers — Xiongnu, Göktürks, Tibet, Liao, Jin, the Mongol Empire — included wherever they coexisted.</p>
+                <h2 class="fw-bold mb-2">History of China</h2>
+                <p class="lead mb-0" style="color: rgba(255,255,255,0.75);">
+                    This is a small fun project I felt like doing after reading some modern Ming-dynasty novel.
+                    Tried my best to ensure it is historically accurate, but I'm a Software Engineer, not a historian. ¯\_(ツ)_/¯
+                    You may need to understand Chinese for this one, since I did not add translations. 
+                    The map is centred on the successive Central Plains dynasties, with the major surrounding powers:
+                     Xiongnu, Göktürks, Tibet, Liao, Jin, the Mongol Empire, all included wherever they coexisted.</p>
                 <div class="free-pill-row">
                     <span class="free-pill">📜 8000 BCE → present</span>
                     <span class="free-pill">👑 538 monarch records</span>
@@ -375,17 +380,17 @@
             <div class="row g-4">
                 <div class="col-md-6 col-12">
                     <div class="gallery-item">
-                        <img src="../resources/images/china-map-warring-states-1.png" alt="Warring States period — nine contending states shown in distinct colours" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <img src="../resources/images/china-map-warring-states.png" alt="Warring States period — nine contending states shown in distinct colours" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#galleryModal">
                     </div>
                 </div>
                 <div class="col-md-6 col-12">
                     <div class="gallery-item">
-                        <img src="../resources/images/china-map-warring-states-2.png" alt="Warring States period — contested border regions shown with diagonal stripe overlays" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <img src="../resources/images/china-map-song-dynasty.png" alt="Song dynasty period - distinct countries with adjacent borders" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#galleryModal">
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="gallery-item">
-                        <img src="../resources/images/china-map-modern-coastline.png" alt="Modern China close-up showing coastline hugging real Natural Earth geography, including Taiwan and Hainan" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <img src="../resources/images/china-map-modern.png" alt="Modern China showing coastline hugging real Natural Earth geography" class="img-fluid gallery-img" data-bs-toggle="modal" data-bs-target="#galleryModal">
                     </div>
                 </div>
             </div>
@@ -398,7 +403,7 @@
             <h2 class="display-5 fw-bold mb-3">A timeline that redraws the whole map</h2>
             <p class="lead mb-5" style="color: rgba(255,255,255,0.7); max-width: 720px;">
                 Hold the timeline down for about 0.6 seconds and it zooms in around the
-                current instant — keep holding and it drills all the way down to individual
+                current instant; keep holding and it drills all the way down to individual
                 days, so you can stop on 9 February 1234 and watch the Jin dynasty's last
                 emperor reign for half a day before Caizhou falls.
             </p>
@@ -415,7 +420,7 @@
                     <div class="feature-card">
                         <span class="feature-icon">🧵</span>
                         <div class="feature-title">Contested stripes</div>
-                        <div class="feature-desc">Regions fought over, occupied, or of disputed allegiance render as two-colour diagonal stripes — Song–Jin Huainan, Mongol–Song Sichuan, Qing vs. the Taiping, WWII-occupied territory.</div>
+                        <div class="feature-desc">Regions fought over, occupied, or of disputed allegiance render as two-colour diagonal stripes: Song–Jin Huainan, Mongol–Song Sichuan, Qing vs. the Taiping, WWII-occupied territory.</div>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6">
@@ -429,7 +434,7 @@
                     <div class="feature-card">
                         <span class="feature-icon">👑</span>
                         <div class="feature-title">Reigning monarchs panel</div>
-                        <div class="feature-desc">A draggable side panel lists every monarch alive at the current instant — name, temple/posthumous name, era name and regnal year, birth/death, predecessor and successor, with a generated seal-style avatar.</div>
+                        <div class="feature-desc">A draggable side panel lists every monarch alive at the current instant: name, temple/posthumous name, era name and regnal year, birth/death, predecessor and successor, with a generated seal-style avatar.</div>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6">
@@ -448,7 +453,7 @@
                 </div>
             </div>
 
-            <div class="honesty-note mt-5">
+            <!-- <div class="honesty-note mt-5">
                 <i>On accuracy:</i> Territory shapes are generalised from Tan Qixiang's
                 <i>Historical Atlas of China</i> and similar sources — illustrative, not
                 county-level scholarship. Xia–Shang–Zhou dates follow the Xia–Shang–Zhou
@@ -456,7 +461,7 @@
                 major turning points are dated to the day, Tang/Song/Liao/Jin/Yuan mostly
                 to the month, earlier periods to the year. Full source list and precision
                 notes are in the in-app "Sources" popup (20 references, 7 caveats).
-            </div>
+            </div> -->
         </div>
     </section>
 
@@ -465,8 +470,8 @@
             <div class="section-eyebrow mb-2">Under the hood</div>
             <h2 class="display-5 fw-bold mb-4">Stack</h2>
             <div class="req-table">
-                <div class="req-row"><span class="req-key">Dependencies</span><span class="req-val">None — vanilla HTML/CSS/JS</span></div>
-                <div class="req-row"><span class="req-key">Build step</span><span class="req-val">None — open index.html directly, or serve statically</span></div>
+                <div class="req-row"><span class="req-key">Dependencies</span><span class="req-val">None: vanilla HTML/CSS/JS</span></div>
+                <div class="req-row"><span class="req-key">Build step</span><span class="req-val">None: open index.html directly, or serve statically</span></div>
                 <div class="req-row"><span class="req-key">Rendering</span><span class="req-val">Custom projection + canvas timeline, no map library</span></div>
                 <div class="req-row"><span class="req-key">Basemap</span><span class="req-val">Natural Earth 1:50m coastline/river/lake data (public domain)</span></div>
                 <div class="req-row"><span class="req-key">Language</span><span class="req-val">Simplified Chinese UI and content</span></div>
@@ -484,7 +489,7 @@
                         <h3>&lt;/&gt; Read the source</h3>
                         <p>
                             Everything the map runs on is in this site's repository, and it is the same
-                            code the live demo above serves — no build step, no bundler, no dependencies.
+                            code the live demo above serves. No build step, no bundler, no dependencies.
                             The historical data lives in plain JavaScript files you can read and correct.
                         </p>
                         <p class="mb-4">
@@ -493,7 +498,7 @@
                         </p>
                         <a href="https://github.com/WpyGG4125/WpyGG4125.github.io/tree/main/source/china-map" class="btn-source" target="_blank" rel="noopener">Browse source on GitHub →</a>
                         <p class="mt-4 mb-0" style="font-size: .88rem; color: rgba(255,255,255,0.45);">
-                            Nothing else is needed: clone it, open <code>index.html</code>, and the map runs —
+                            Nothing else is needed: clone it, open <code>index.html</code>, and the map runs
                             the same way the live demo above does.
                         </p>
                     </div>
@@ -507,9 +512,9 @@
                             The engineering judgement is mine.
                         </p>
                         <ul class="role-list">
-                            <li>I conceptualised the architecture — the zero-dependency constraint, the keyframe-and-interpolate model for shifting borders, and the separation of historical data from the rendering engine.</li>
+                            <li>I conceptualised the architecture, the zero-dependency constraint, the keyframe-and-interpolate model for shifting borders, and the separation of historical data from the rendering engine.</li>
                             <li>I peer-reviewed the code and the historical data, and corrected the territory and dating claims against the atlases and chronologies cited in the Sources panel.</li>
-                            <li>I debugged the inconsistencies and functional flaws — seams between neighbouring polities, coastline clipping against Natural Earth geography, timeline zoom behaviour, and centroid label placement.</li>
+                            <li>I debugged the inconsistencies and functional flaws: seams between neighbouring polities, coastline clipping against Natural Earth geography, timeline zoom behaviour, and centroid label placement.</li>
                             <li>I guided Claude throughout, deciding which periods and features to build next and how each should behave.</li>
                         </ul>
                     </div>

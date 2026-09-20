@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>World Brief — Pengyue Wang</title>
+    <title>World Brief - Pengyue Wang</title>
     <meta name="description" content="A local-first world news reader: ~700 feeds from 197 nations, clustered into events, geolocated, classified and translated entirely on your own machine. No AI service, no API key, no server.">
     <link href="../bootstrap.min.css" rel="stylesheet">
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico?">
@@ -27,6 +27,7 @@
         .navbar {
             z-index: 1000;
             background: rgba(7, 11, 16, 0.85);
+            font-family: "Cabin Sketch", cursive;
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
@@ -218,7 +219,7 @@
 
         .btn-dl-sm {
             display: inline-block;
-            border: 1px solid rgba(255,255,255,0.18);
+            /* border: 1px solid rgba(255,255,255,0.18); */
             border-radius: 10px;
             padding: 10px 18px;
             color: white;
@@ -374,7 +375,7 @@
             <div class="app-icon">🌍</div>
             <h1>World Brief</h1>
             <div class="eyebrow-pill">Local-first world news</div>
-            <p class="hero-tagline">Fifteen minutes a day instead of browsing news sites. ~700 feeds from all 197 nations, grouped into events, placed on a map, ranked, and translated — entirely on your own machine. No AI service, no API key, no server of mine anywhere in the loop.</p>
+            <p class="hero-tagline">Fifteen minutes a day instead of browsing news sites. ~700 feeds from all 197 nations, grouped into events, placed on a map, ranked, and translated entirely on your own machine. No AI service, no API key, no server of mine anywhere in the loop.</p>
 
             <a href="world-brief/WorldBrief-1.0.0.dmg" class="btn-download" download>⬇ Download for macOS</a>
             <div class="download-meta">v1.0.0 &nbsp;·&nbsp; 69 MB &nbsp;·&nbsp; macOS 11+ &nbsp;·&nbsp; Apple Silicon &amp; Intel</div>
@@ -395,8 +396,16 @@
     <section class="section-wrap">
         <div class="container">
             <div class="free-banner">
-                <h2 class="fw-bold mb-2">23,000 articles in. One 15-minute brief out.</h2>
-                <p class="lead mb-0" style="color: rgba(255,255,255,0.75);">Every model it uses, it trains itself on the corpus it just fetched. Every translation runs offline on your CPU. Nothing you read leaves the machine.</p>
+                <h2 class="fw-bold mb-2">23,000 articles in 15 minutes.</h2>
+                <p class="lead mb-0" style="color: rgba(255,255,255,0.75);">
+                    With information so accessible today I discovered that somehow my attention is so fragmented 
+                    I actually read less proper news than before, and I feel that apart from global hotspots 
+                    I am in reality hearing less from what is going on in other parts of the world. Therefore
+                    I created this project to spend a little time every day to gain a comprehensive view
+                    of what is happening everywhere, to hear the different sides of the story, and to processs
+                    the events from different outlets in different languages with ease.
+                    The app incorporates learning models that train themselves on the corpus they just fetched. 
+                    Every translation runs offline on your CPU. Nothing you read leaves the machine.</p>
                 <div class="free-pill-row">
                     <span class="free-pill">🗞️ ~500 labelled outlets</span>
                     <span class="free-pill">🌐 197 nations covered</span>
@@ -409,6 +418,15 @@
         </div>
     </section>
 
+    <section class="section-wrap pb-2">
+        <div class="container">
+            <div class="honesty-note mt-5" style="color:azure; font-size: larger;">
+                Note: Since the app is not published on the Mac App Store, opening it the first time may prompt a security warning.
+                To solve this issue, open <code>System Preferences -> Privacy & Security</code>, and give it permission to install.
+            </div>
+        </div>
+    </section>
+
     <section class="section-wrap" style="background: rgba(255,255,255,0.015);">
         <div class="container">
             <div class="section-eyebrow mb-2">What it does</div>
@@ -416,7 +434,7 @@
             <p class="lead mb-5" style="color: rgba(255,255,255,0.7); max-width: 760px;">
                 A brief is not a feed. Articles are clustered into events, each event is ranked
                 on how widely and how independently it is being covered, and the day's selection
-                is packed greedily into a reading budget — with at least two independent outlets
+                is packed greedily into a reading budget, with at least two independent outlets
                 required before anything makes the cut.
             </p>
 
@@ -425,28 +443,28 @@
                     <div class="feature-card">
                         <span class="feature-icon">📋</span>
                         <div class="feature-title">The brief</div>
-                        <div class="feature-desc">Ranked events with time, place, relevance and reading time; a neutral extractive summary where every sentence names the outlet that published it; and a timer tracking the 15-minute daily budget.</div>
+                        <div class="feature-desc">Ranked events with time, place, relevance and reading time; a neutral extractive summary where every sentence names the outlet that published it, and a timer tracking the 15-minute daily budget.</div>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6">
                     <div class="feature-card">
                         <span class="feature-icon">🗺️</span>
                         <div class="feature-title">World map</div>
-                        <div class="feature-desc">Events as markers — colour for macro-topic, size for relevance, a ring for "in today's brief" — plus country hotspots and dashed links between nations the same stories tie together. Leaflet and Natural Earth outlines, both vendored: no tile server, no key.</div>
+                        <div class="feature-desc">Events as markers: colour for macro-topic, size for relevance, a ring for "in today's brief", plus country hotspots and dashed links between nations the same stories tie together. Leaflet and Natural Earth outlines, both vendored: no tile server, no key.</div>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6">
                     <div class="feature-card">
                         <span class="feature-icon">⚖️</span>
                         <div class="feature-title">Sides of the story</div>
-                        <div class="feature-desc">Articles grouped by the outlets' country or by editorial polarity — left, right, centre, state-government, independent-opposition — with the most central headline per side and a framing-divergence score. State and party media are included deliberately, and marked.</div>
+                        <div class="feature-desc">Articles grouped by the outlets' country or by editorial polarity: left, right, centre, state-government, independent-opposition, with the most central headline per side and a framing-divergence score. State and party media are included deliberately, and marked.</div>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6">
                     <div class="feature-card">
                         <span class="feature-icon">🧭</span>
                         <div class="feature-title">Places without a geocoder</div>
-                        <div class="feature-desc">A gazetteer of 197 countries with demonyms and exonyms in ten languages plus ~270 cities and hotspots, matched by token n-grams in one pass — with substring matching for Chinese, Japanese and Korean and guards against person names and overshadowed countries.</div>
+                        <div class="feature-desc">A gazetteer of 197 countries with demonyms and exonyms in ten languages plus ~270 cities and hotspots, matched by token n-grams in one pass, with substring matching for Chinese, Japanese and Korean and guards against person names and overshadowed countries.</div>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6">
@@ -460,19 +478,19 @@
                     <div class="feature-card">
                         <span class="feature-icon">🔤</span>
                         <div class="feature-title">Offline translation</div>
-                        <div class="feature-desc">Argos/OpenNMT weights run by CTranslate2 — downloaded once, then used forever offline, pivoting through English where no direct pair exists. A SQLite translation memory means a headline costs ~20 ms once and nothing after.</div>
+                        <div class="feature-desc">Argos/OpenNMT weights run by CTranslate2: downloaded once, then used forever offline, pivoting through English where no direct pair exists. A SQLite translation memory means a headline costs ~20 ms once and nothing after.</div>
                     </div>
                 </div>
             </div>
 
-            <div class="honesty-note mt-5">
-                <i>On honesty:</i> summaries are extractive, never generated — a sentence in the
+            <!-- <div class="honesty-note mt-5">
+                <i>On honesty:</i> summaries are extractive, never generated: a sentence in the
                 brief is always a sentence somebody published, and it names its outlet. Leaning
                 labels are a reading aid drawn from widely cited assessments and each outlet's own
                 stated line, not a verdict. Translation is machine translation running on a laptop:
                 reliable for the gist of a headline, unreliable for the exact wording of a quotation,
                 which is why the original is always one click away and the interface says so.
-            </div>
+            </div> -->
         </div>
     </section>
 
@@ -485,11 +503,11 @@
                 <div class="req-row"><span class="req-key">Store</span><span class="req-val">SQLite, 14-day retention, per-article feature cache invalidated by a version stamp</span></div>
                 <div class="req-row"><span class="req-key">Events</span><span class="req-val">TF-IDF cosine agglomeration per language, centroid check against chaining, cross-language merge on shared places</span></div>
                 <div class="req-row"><span class="req-key">Ranking</span><span class="req-val">Coverage breadth, category gravity, tier-1 bonus, recency decay, predicted salience, contestedness, your feedback</span></div>
-                <div class="req-row"><span class="req-key">Summary</span><span class="req-val">Unsupervised extractive — sentence centroid relevance with MMR diversity, attributed per sentence</span></div>
+                <div class="req-row"><span class="req-key">Summary</span><span class="req-val">Unsupervised extractive: sentence centroid relevance with MMR diversity, attributed per sentence</span></div>
                 <div class="req-row"><span class="req-key">API / UI</span><span class="req-val">FastAPI JSON API; vanilla JS and Leaflet, no framework, no CDN</span></div>
                 <div class="req-row"><span class="req-key">Desktop shell</span><span class="req-val">One process: uvicorn on a loopback port, the refresh scheduler, and a native WKWebView / WebView2 / WebKitGTK window over it</span></div>
                 <div class="req-row"><span class="req-key">Packaging</span><span class="req-val">PyInstaller for three desktop systems with native installers; a Kotlin client for Android; every icon drawn by <code>make_icons.py</code></span></div>
-                <div class="req-row"><span class="req-key">Full refresh</span><span class="req-val">~100 s for 700 feeds and 23,000 articles on an Apple-silicon Mac — 3 s of that clustering, ~5 s training and classification</span></div>
+                <div class="req-row"><span class="req-key">Full refresh</span><span class="req-val">~100 s for 700 feeds and 23,000 articles on an Apple-silicon Mac: 3 s of that clustering, ~5 s training and classification</span></div>
             </div>
         </div>
     </section>
@@ -499,7 +517,7 @@
             <div class="section-eyebrow mb-2">Downloads</div>
             <h2 class="display-5 fw-bold mb-3">Every platform</h2>
             <p class="lead mb-5" style="color: rgba(255,255,255,0.7); max-width: 720px;">
-                One click on the icon starts everything — server, refresh scheduler and window are
+                One click on the icon starts everything: server, refresh scheduler and window are
                 a single process, and closing the window leaves the news being collected in the
                 background. The Windows and Linux installers are built from the same tree with
                 <code>packaging/build.sh</code>.
@@ -510,7 +528,7 @@
                     <div class="dl-card">
                         <h3>macOS 11+</h3>
                         <div class="dl-note">Drag it into Applications. Closing the window hides the app; the Dock icon brings it back, ⌘Q quits it. The build is unsigned, so the first launch needs a right-click → Open.</div>
-                        <div><a href="world-brief/WorldBrief-1.0.0.dmg" class="btn-dl-sm primary" download>⬇ Download .dmg — 69 MB</a>
+                        <div><a href="world-brief/WorldBrief-1.0.0.dmg" class="btn-dl-sm primary" download>⬇ Download .dmg - 69 MB</a>
                             <div class="dl-hash">
                                 <span class="hash-label">MD5</span>
                                 <span class="hash-value">ac4ffdd31c26058c8f8ee878ec527b4d</span>
@@ -522,8 +540,8 @@
                 <div class="col-md-6">
                     <div class="dl-card">
                         <h3>Android 8+</h3>
-                        <div class="dl-note">A reader for the copy on your own computer — it can find it on your network for you. It keeps the current brief cached, so it opens instantly and reads offline. The phone never runs the pipeline; clustering 23,000 articles is work for a laptop.</div>
-                        <div><a href="world-brief/WorldBrief-1.0.0.apk" class="btn-dl-sm primary" download>⬇ Download .apk — 1.7 MB</a>
+                        <div class="dl-note">A reader for the copy on your own computer: it can find it on your network for you. It keeps the current brief cached, so it opens instantly and reads offline. The phone never runs the pipeline; clustering 23,000 articles is work for a laptop.</div>
+                        <div><a href="world-brief/WorldBrief-1.0.0.apk" class="btn-dl-sm primary" download>⬇ Download .apk - 1.7 MB</a>
                             <div class="dl-hash">
                                 <span class="hash-label">MD5</span>
                                 <span class="hash-value">c5b0b2e0984393e92d81c76463e491a9</span>
@@ -559,9 +577,9 @@
                     <div class="source-card">
                         <h3>&lt;/&gt; Read the source</h3>
                         <p>
-                            The full tree — backend pipeline, FastAPI service, vanilla-JS frontend,
+                            The full tree of backend pipeline, FastAPI service, vanilla-JS frontend,
                             desktop shell, Kotlin Android client and the packaging scripts for all
-                            four platforms — is in this site's repository.
+                            four platforms is in this site's repository.
                         </p>
                         <p class="mb-4">
                             <code>backend/</code> · <code>frontend/</code> · <code>desktop/</code> ·
@@ -570,7 +588,7 @@
                         <a href="https://github.com/WpyGG4125/WpyGG4125.github.io/tree/main/source/world-brief" class="btn-dl-sm primary" target="_blank" rel="noopener">Browse source on GitHub →</a>
                         <p class="mt-4 mb-0" style="font-size: .88rem; color: rgba(255,255,255,0.45);">
                             Datasets, downloaded translation models and build output are not in the
-                            repository — the app fetches or builds what it needs on first run.
+                            repository, the app fetches or builds what it needs on first run.
                         </p>
                     </div>
                 </div>
@@ -583,9 +601,9 @@
                             The engineering judgement is mine.
                         </p>
                         <ul class="role-list">
-                            <li>I conceptualised the architecture — the pipeline stages, the local-first constraint, and the decision that no external AI service or API key would ever be involved.</li>
+                            <li>I conceptualised the architecture, the pipeline stages, the local-first constraint, and the decision that no external AI service or API key would ever be involved.</li>
                             <li>I peer-reviewed the code that came back, and rejected or reworked what did not fit the design.</li>
-                            <li>I debugged the inconsistencies and functional flaws — clustering that chained across unrelated stories, gazetteer false positives, translation pivots, packaging failures.</li>
+                            <li>I debugged the inconsistencies and functional flaws, clustering that chained across unrelated stories, gazetteer false positives, translation pivots, packaging failures.</li>
                             <li>I guided Claude throughout, deciding what to build next and how each piece should behave.</li>
                         </ul>
                     </div>

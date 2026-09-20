@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Continuum — Pengyue Wang</title>
-    <meta name="description" content="Continuum — a free, native macOS control center for cleaning, disk visualization, security scanning, and hardware telemetry. Universal builds for macOS 10.15 Catalina through macOS 13 Ventura and later. No ads, no trackers.">
+    <title>Continuum - Pengyue Wang</title>
+    <meta name="description" content="Continuum: a free, native macOS control center for cleaning, disk visualization, security scanning, and hardware telemetry. Universal builds for macOS 10.15 Catalina through macOS 13 Ventura and later. No ads, no trackers.">
     <link href="../bootstrap.min.css" rel="stylesheet">
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico?">
     <script src="../bootstrap.bundle.min.js"></script>
@@ -348,7 +348,7 @@
             display: block;
             text-align: center;
             background: rgba(77,171,247,0.15);
-            border: 1px solid rgba(77,171,247,0.4);
+            /* border: 1px solid rgba(77,171,247,0.4); */
             color: var(--c-blue-2);
             font-weight: 700;
             padding: 11px 18px;
@@ -527,15 +527,18 @@
     <section class="section-wrap">
         <div class="container">
             <div class="free-banner">
-                <h2 class="fw-bold mb-2">100% Free. No Catch.</h2>
-                <p class="lead mb-0" style="color: rgba(255,255,255,0.75);">No ads. No trackers or telemetry phoning home. No subscriptions, sign-ups, or feature paywalls.</p>               
+                <h2 class="fw-bold mb-2">Utility that is 100% Free, as it should be.</h2>
+                <p class="lead mb-0" style="color: rgba(255,255,255,0.75);">
+                    This project was created when I couldn't find a free version of CleanMyMac that combines security scanning
+                    with cleaning and showing disk space as a block map. So I created it with Claude Code and tweaked it in the way I want, 
+                    including all the potentially useful functions I believe a mac cleaner app should have.
+                    And there are no ads, no trackers or cookies, no subscriptions, sign-ups, or feature paywalls.</p>               
                 <div class="free-pill-row">
                     <span class="free-pill">🚫 No ads</span>
                     <span class="free-pill">🚫 No trackers</span>
                     <span class="free-pill">🚫 No sign-up</span>
                     <span class="free-pill">🚫 No subscription</span>
                     <span class="free-pill">✅ Free for personal use</span>
-                    <span class="free-pill">❤️ Relies only on donations</span>
                 </div>
             </div>
         </div>
@@ -601,7 +604,7 @@
                     <div class="feature-card">
                         <span class="feature-icon">🧹</span>
                         <div class="feature-title">Cleaner</div>
-                        <div class="feature-desc">Scans whitelisted caches, logs, DerivedData and orphaned app support for reclaimable space. Previews everything and moves to Trash — never hard-deletes.</div>
+                        <div class="feature-desc">Scans whitelisted caches, logs, DerivedData and orphaned app support for reclaimable space. Previews everything and moves to Trash.</div>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6">
@@ -615,14 +618,14 @@
                     <div class="feature-card">
                         <span class="feature-icon">🛡️</span>
                         <div class="feature-title">Security Scanner</div>
-                        <div class="feature-desc">Malware / adware / spyware scanning across three tiers — standard, deep, forensic — with reversible quarantine, never permanent deletion.</div>
+                        <div class="feature-desc">Malware / adware / spyware scanning across three tiers: standard, deep, forensic with reversible quarantine, never permanent deletion.</div>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6">
                     <div class="feature-card">
                         <span class="feature-icon">🗑️</span>
                         <div class="feature-title">Smart Uninstaller</div>
-                        <div class="feature-desc">Finds every on-disk trace of an app — bundle, launch agents, app support, caches, container data — and removes only what you choose.</div>
+                        <div class="feature-desc">Finds every on-disk trace of an app: bundle, launch agents, app support, caches, container data, and removes only what you choose.</div>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6">
@@ -643,7 +646,7 @@
                     <div class="feature-card">
                         <span class="feature-icon">🔥</span>
                         <div class="feature-title">Shredder &amp; Free-Space Wipe</div>
-                        <div class="feature-desc">Multi-pass secure erase for sensitive files, plus a free-space wipe that overwrites unused blocks so deleted files can't be recovered — live data is never touched.</div>
+                        <div class="feature-desc">Multi-pass secure erase for sensitive files, plus a free-space wipe that overwrites unused blocks so deleted files can't be recovered. Live data is never touched.</div>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6">
@@ -662,13 +665,9 @@
                 </div>
             </div>
 
-            <div class="honesty-note mt-5">
-                Not every Mac has every sensor, and some
-                hardware has no stable public API — Continuum says so in the UI instead of faking a
-                reading. The network monitor has no kernel filter entitlement, so it watches
-                established connections and enforces blocks via <code>pf</code> rather than claiming
-                packet-level interception.
-            </div>
+            <!-- <div class="honesty-note mt-5">
+                Note that not every Mac has every sensor, and some hardware has no stable public API.
+            </div> -->
 
             <div class="language-note mt-5">
                 Supports application in native languages:                 
@@ -695,11 +694,11 @@
             <div class="section-eyebrow mb-2">Before you install</div>
             <h2 class="display-5 fw-bold mb-4">System requirements</h2>
             <div class="req-table">
-                <div class="req-row"><span class="req-key">macOS version</span><span class="req-val">macOS 13 (Ventura) or later — separate builds go back to macOS 10.15 Catalina</span></div>
+                <div class="req-row"><span class="req-key">macOS version</span><span class="req-val">macOS 13 (Ventura) or later. Separate builds go back to macOS 10.15 Catalina</span></div>
                 <div class="req-row"><span class="req-key">Architecture</span><span class="req-val">Apple Silicon &amp; Intel</span></div>
                 <div class="req-row"><span class="req-key">Permissions</span><span class="req-val">Full Disk Access (one-time grant, for cleaning &amp; security features)</span></div>
-                <div class="req-row"><span class="req-key">Sandboxing</span><span class="req-val">Not sandboxed — required for direct cache/disk access</span></div>
-                <div class="req-row"><span class="req-key">License</span><span class="req-val">CC BY-NC-SA 4.0 — free for personal, non-commercial use</span></div>
+                <div class="req-row"><span class="req-key">Sandboxing</span><span class="req-val">Not sandboxed. Required for direct cache/disk access</span></div>
+                <div class="req-row"><span class="req-key">License</span><span class="req-val">CC BY-NC-SA 4.0: free for personal, non-commercial use</span></div>
             </div>
         </div>
     </section>
@@ -848,7 +847,7 @@
                         <a href="https://github.com/WpyGG4125/WpyGG4125.github.io/tree/main/source/continuum" class="btn-source" target="_blank" rel="noopener">Browse source on GitHub →</a>
                         <p class="mt-4 mb-0" style="font-size: .88rem; color: rgba(255,255,255,0.45);">
                             Build output, the Swift package cache and signing material are not in the
-                            repository — <code>build.sh</code> produces every macOS build from this tree.
+                            repository. <code>build.sh</code> produces every macOS build from this tree.
                         </p>
                     </div>
                 </div>
@@ -861,9 +860,9 @@
                             The engineering judgement is mine.
                         </p>
                         <ul class="role-list">
-                            <li>I conceptualised the architecture — the split into independent feature kits, the privileged-task and secure-store boundaries, and the compatibility layer that lets one code base target macOS 10.15 through 26.</li>
+                            <li>I conceptualised the architecture, the split into independent feature kits, the privileged-task and secure-store boundaries, and the compatibility layer that lets one code base target macOS 10.15 through 26.</li>
                             <li>I peer-reviewed every change that came back, and reworked what did not fit the design or the safety policy.</li>
-                            <li>I debugged the inconsistencies and functional flaws — sandbox and TCC permission edge cases, cache-cleaning safety rules, SMART parsing on unusual drives, and back-deployment breakages across four SDK versions.</li>
+                            <li>I debugged the inconsistencies and functional flaws: sandbox and TCC permission edge cases, cache-cleaning safety rules, SMART parsing on unusual drives, and back-deployment breakages across four SDK versions.</li>
                             <li>I guided Claude throughout, deciding which module came next and exactly how it should behave.</li>
                         </ul>
                     </div>
