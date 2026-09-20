@@ -1,0 +1,22 @@
+# Extra dependencies for the packaged desktop application (macOS, Windows, Linux).
+# The app itself still needs requirements.txt; these only add the native shell and the packager.
+-r requirements.txt
+
+pywebview>=5.4              # the native window: WKWebView, WebView2 or WebKitGTK
+pyinstaller>=6.10           # produces the .app, the .exe and the Linux directory build
+Pillow>=10.3                # icon and disc-image artwork, and the tray icon image
+pystray>=0.19; sys_platform != "darwin"   # tray icon on Windows and Linux
+
+# Windows uses the Edge WebView2 runtime through these; harmless to install elsewhere.
+pythonnet>=3.0; sys_platform == "win32"
+cefpython3; sys_platform == "win32" and python_version < "3.10"
+
+# macOS talks to AppKit and WebKit through PyObjC, which pywebview pulls in on its own.
+pyobjc-framework-Cocoa>=10.1; sys_platform == "darwin"
+pyobjc-framework-WebKit>=10.1; sys_platform == "darwin"
+
+# Linux needs WebKitGTK from the distribution itself; there is no wheel for it:
+#   Debian/Ubuntu: sudo apt install python3-gi gir1.2-webkit2-4.1 libwebkit2gtk-4.1-0
+#   Fedora:        sudo dnf install python3-gobject webkit2gtk4.1
+# Without it the app still runs and opens in the default browser instead.
+PyGObject>=3.46; sys_platform == "linux"

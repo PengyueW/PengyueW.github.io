@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The same palette the web interface uses. -->
+    <color name="wb_accent">#2A78D6</color>
+    <color name="wb_accent_dark">#3987E5</color>
+    <color name="wb_ink">#1A1A19</color>
+    <color name="wb_ink_light">#262624</color>
+    <color name="wb_paper">#FCFCFB</color>
+    <color name="wb_surface_dark">#222221</color>
+    <color name="wb_conflict">#E34948</color>
+    <color name="wb_society">#1BAF7A</color>
+</resources>

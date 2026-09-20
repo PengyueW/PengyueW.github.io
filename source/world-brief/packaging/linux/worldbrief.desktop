@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=World Brief
+GenericName=World news brief
+Comment=Fifteen minutes a day: the world's important events, from every nation's press
+Exec=worldbrief %U
+Icon=worldbrief
+Terminal=false
+Categories=Network;News;
+Keywords=news;world;press;brief;rss;
+StartupWMClass=worldbrief
+StartupNotify=true

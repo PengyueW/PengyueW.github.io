@@ -1,0 +1,132 @@
+name: Build distribution packages
+
+# Builds every platform's package. Tag a release (v1.0.0) to get them attached to it; run the
+# workflow by hand to get them as downloadable artifacts.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  macos:
+    name: macOS (.app + .dmg)
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m venv .venv
+          .venv/bin/pip install --upgrade pip
+          .venv/bin/pip install -r requirements-desktop.txt
+      - name: Build
+        # Signing and notarisation run only when the secrets are present; without them the
+        # disc image is still produced, just unsigned.
+        env:
+          MACOS_SIGN_IDENTITY: ${{ secrets.MACOS_SIGN_IDENTITY }}
+          NOTARY_PROFILE: ${{ secrets.NOTARY_PROFILE }}
+        run: bash packaging/macos/build_macos.sh --skip-deps
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-dmg
+          path: dist/*.dmg
+
+  windows:
+    name: Windows (.exe installer + portable .zip)
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+      - name: Build
+        shell: pwsh
+        run: powershell -ExecutionPolicy Bypass -File packaging\windows\build_windows.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-packages
+          path: |
+            dist/*setup.exe
+            dist/*.zip
+
+  linux:
+    name: Linux (.deb + AppImage + .tar.gz)
+    # Built on the oldest supported release: glibc only works forwards.
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install WebKitGTK and packaging tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libgirepository1.0-dev libcairo2-dev pkg-config python3-dev \
+            gir1.2-webkit2-4.1 libwebkit2gtk-4.1-0 libgtk-3-0 \
+            dpkg-dev fuse desktop-file-utils
+      - name: Install dependencies
+        run: |
+          python -m venv .venv
+          .venv/bin/pip install --upgrade pip
+          .venv/bin/pip install -r requirements-desktop.txt
+      - name: Build
+        run: bash packaging/linux/build_linux.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-packages
+          path: |
+            dist/*.deb
+            dist/*.AppImage
+            dist/*.tar.gz
+
+  android:
+    name: Android (.apk + .aab)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Restore the signing key
+        # Without these secrets the release build falls back to the debug key: installable,
+        # but not publishable to Play.
+        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
+        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/worldbrief.jks"
+      - name: Build
+        env:
+          WORLDBRIEF_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' && format('{0}/worldbrief.jks', runner.temp) || '' }}
+          WORLDBRIEF_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          WORLDBRIEF_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          WORLDBRIEF_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: bash packaging/android/build_android.sh release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-packages
+          path: |
+            dist/*.apk
+            dist/*.aab
+
+  release:
+    name: Attach everything to the tag
+    needs: [macos, windows, linux, android]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: packages
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: packages/**/*
+          generate_release_notes: true

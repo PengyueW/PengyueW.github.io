@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Brief — Pengyue Wang</title>
+    <meta name="description" content="A local-first world news reader: ~700 feeds from 197 nations, clustered into events, geolocated, classified and translated entirely on your own machine. No AI service, no API key, no server.">
+    <link href="../bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico?">
+    <script src="../bootstrap.bundle.min.js"></script>
+    <style>
+        :root {
+            --wb-1: #0b4f6c;
+            --wb-2: #1b98e0;
+            --wb-3: #6fd6ff;
+            --wb-glow: rgba(111, 214, 255, 0.25);
+        }
+
+        body {
+            background-color: #070b10;
+            color: white;
+            margin: 0;
+            overflow-x: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .navbar {
+            z-index: 1000;
+            background: rgba(7, 11, 16, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .navbar-brand, .nav-link { padding: 10px 15px !important; }
+
+        /* ---------- Hero ---------- */
+        #hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 140px 20px 80px;
+            background:
+                radial-gradient(circle at 50% 18%, var(--wb-glow), transparent 45%),
+                linear-gradient(180deg, #070b10 0%, #0d1b2a 55%, #070b10 100%);
+        }
+
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(111,214,255,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(111,214,255,0.05) 1px, transparent 1px);
+            background-size: 48px 48px;
+            mask-image: radial-gradient(circle at 50% 30%, rgba(0,0,0,0.9), transparent 70%);
+            -webkit-mask-image: radial-gradient(circle at 50% 30%, rgba(0,0,0,0.9), transparent 70%);
+        }
+
+        .hero-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 780px;
+        }
+
+        .app-icon {
+            font-size: 5.5rem;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 20px 40px var(--wb-glow));
+            animation: float 5s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .eyebrow-pill {
+            display: inline-block;
+            background: rgba(111,214,255,0.12);
+            border: 1px solid rgba(111,214,255,0.35);
+            color: var(--wb-3);
+            border-radius: 999px;
+            padding: 6px 18px;
+            font-size: .8rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 22px;
+        }
+
+        .hero-inner h1 {
+            font-weight: 800;
+            font-size: 3.2rem;
+            margin-bottom: 10px;
+        }
+
+        .hero-tagline {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 36px;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, var(--wb-1), var(--wb-2));
+            border: none;
+            color: white;
+            font-weight: 700;
+            font-size: 1.15rem;
+            padding: 16px 44px;
+            border-radius: 14px;
+            box-shadow: 0 14px 34px rgba(27,152,224,0.4);
+            transition: transform .25s ease, box-shadow .25s ease;
+            display: inline-block;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 42px rgba(27,152,224,0.55);
+            color: white;
+        }
+
+        .download-meta {
+            margin-top: 14px;
+            color: rgba(255,255,255,0.5);
+            font-size: .9rem;
+        }
+
+        /* ---------- Sections ---------- */
+        .section-wrap { padding: 100px 0; }
+
+        .section-eyebrow {
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            font-size: .8rem;
+            color: var(--wb-3);
+            font-weight: 600;
+        }
+
+        .free-banner {
+            background: linear-gradient(135deg, rgba(11,79,108,0.35), rgba(111,214,255,0.07));
+            border: 1px solid rgba(111,214,255,0.25);
+            border-radius: 22px;
+            padding: 50px;
+            text-align: center;
+        }
+
+        .free-pill-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 26px; }
+
+        .free-pill {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 999px;
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: .95rem;
+        }
+
+        /* ---------- Features ---------- */
+        .feature-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 28px;
+            height: 100%;
+            transition: all .3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(111,214,255,0.4);
+            transform: translateY(-6px);
+            background: rgba(111,214,255,0.06);
+        }
+
+        .feature-icon { font-size: 2.2rem; margin-bottom: 14px; display: block; }
+        .feature-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 8px; }
+        .feature-desc { color: rgba(255,255,255,0.6); font-size: .92rem; }
+
+        /* ---------- Pipeline table ---------- */
+        .req-table {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 10px 30px;
+        }
+
+        .req-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .req-row:last-child { border-bottom: none; }
+        .req-key { color: rgba(255,255,255,0.5); }
+        .req-val { font-weight: 600; text-align: right; max-width: 60ch; }
+
+        /* ---------- Downloads ---------- */
+        .dl-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 26px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dl-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; }
+        .dl-card .dl-note { color: rgba(255,255,255,0.55); font-size: .9rem; flex-grow: 1; margin-bottom: 18px; }
+
+        .btn-dl-sm {
+            display: inline-block;
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 10px;
+            padding: 10px 18px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: .92rem;
+            transition: all .25s ease;
+        }
+
+        .btn-dl-sm:hover { background: rgba(255,255,255,0.08); color: white; border-color: rgba(111,214,255,0.5); }
+        .btn-dl-sm.primary { background: linear-gradient(135deg, var(--wb-1), var(--wb-2)); border-color: transparent; }
+        .btn-dl-sm.primary:hover { filter: brightness(1.15); }
+
+        /* ---------- Source / collaboration ---------- */
+        .source-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 18px;
+            padding: 34px;
+            height: 100%;
+        }
+
+        .source-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
+        .source-card p { color: rgba(255,255,255,0.65); font-size: .95rem; }
+
+        .role-list { list-style: none; padding-left: 0; margin: 0; }
+        .role-list li {
+            padding: 9px 0 9px 26px;
+            position: relative;
+            color: rgba(255,255,255,0.72);
+            font-size: .95rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .role-list li:last-child { border-bottom: none; }
+        .role-list li::before {
+            content: "▸";
+            position: absolute;
+            left: 4px;
+            color: var(--wb-3);
+        }
+
+        .honesty-note {
+            border-left: 3px solid var(--wb-3);
+            padding: 18px 24px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 0 14px 14px 0;
+            color: rgba(255,255,255,0.7);
+            font-size: .95rem;
+        }
+
+        code {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 7px;
+            border-radius: 5px;
+            color: var(--wb-3);
+            font-size: .88em;
+        }
+
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            color: rgba(255,255,255,0.4);
+            font-size: .85rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        footer a { color: rgba(255,255,255,0.6); }
+
+        @media (max-width: 576px) {
+            .hero-inner h1 { font-size: 2.2rem; }
+            .free-banner { padding: 32px 22px; }
+        }
+        /* ---------- Hashes ---------- */
+        .hash-row {
+            margin-top: 26px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            padding: 10px 10px 10px 18px;
+            font-family: "SF Mono", Menlo, Consolas, monospace;
+            font-size: .82rem;
+            color: rgba(255,255,255,0.75);
+            max-width: 100%;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hash-label {
+            color: rgba(255,255,255,0.4);
+            font-family: -apple-system, sans-serif;
+            font-size: .72rem;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+        }
+
+        .dl-hash {
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-family: "SF Mono", Menlo, Consolas, monospace;
+            font-size: .7rem;
+            color: rgba(255,255,255,0.5);
+            word-break: break-all;
+        }
+
+        .btn-copy {
+            background: rgba(27,152,224,0.18);
+            border: 1px solid rgba(27,152,224,0.45);
+            color: var(--wb-3);
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: .78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-copy:hover { background: rgba(27,152,224,0.3); }
+        .btn-copy.copied { background: rgba(32,201,151,0.2); border-color: rgba(32,201,151,0.5); color: #20c997; }
+
+        @media (max-width: 576px) {
+            .hash-row { font-size: .68rem; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">Pengyue Wang / 王鹏越</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item fs-2 px-2"><a class="nav-link" href="../index.html#about">About</a></li>
+                    <li class="nav-item fs-2 px-2"><a class="nav-link" href="../projects.html">Projects</a></li>
+                    <li class="nav-item fs-2 px-2"><a class="nav-link" href="../index.html#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section id="hero">
+        <div class="hero-grid"></div>
+        <div class="hero-inner">
+            <div class="app-icon">🌍</div>
+            <h1>World Brief</h1>
+            <div class="eyebrow-pill">Local-first world news</div>
+            <p class="hero-tagline">Fifteen minutes a day instead of browsing news sites. ~700 feeds from all 197 nations, grouped into events, placed on a map, ranked, and translated — entirely on your own machine. No AI service, no API key, no server of mine anywhere in the loop.</p>
+
+            <a href="world-brief/WorldBrief-1.0.0.dmg" class="btn-download" download>⬇ Download for macOS</a>
+            <div class="download-meta">v1.0.0 &nbsp;·&nbsp; 69 MB &nbsp;·&nbsp; macOS 11+ &nbsp;·&nbsp; Apple Silicon &amp; Intel</div>
+
+            <div>
+                <div class="hash-row">
+                    <span class="hash-label">MD5</span>
+                    <span class="hash-value">ac4ffdd31c26058c8f8ee878ec527b4d</span>
+                    <button class="btn-copy" onclick="copyHash(this)">Copy</button>
+                </div>
+            </div>
+            <div class="download-meta">
+                On Windows, Linux or Android? <a href="#downloads" style="color: var(--wb-3);">See the other builds ↓</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap">
+        <div class="container">
+            <div class="free-banner">
+                <h2 class="fw-bold mb-2">23,000 articles in. One 15-minute brief out.</h2>
+                <p class="lead mb-0" style="color: rgba(255,255,255,0.75);">Every model it uses, it trains itself on the corpus it just fetched. Every translation runs offline on your CPU. Nothing you read leaves the machine.</p>
+                <div class="free-pill-row">
+                    <span class="free-pill">🗞️ ~500 labelled outlets</span>
+                    <span class="free-pill">🌐 197 nations covered</span>
+                    <span class="free-pill">🗺️ Events on a world map</span>
+                    <span class="free-pill">🈯 16 interface languages</span>
+                    <span class="free-pill">🔌 Fully offline translation</span>
+                    <span class="free-pill">🔑 No API key</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap" style="background: rgba(255,255,255,0.015);">
+        <div class="container">
+            <div class="section-eyebrow mb-2">What it does</div>
+            <h2 class="display-5 fw-bold mb-3">A newsroom that fits in a laptop</h2>
+            <p class="lead mb-5" style="color: rgba(255,255,255,0.7); max-width: 760px;">
+                A brief is not a feed. Articles are clustered into events, each event is ranked
+                on how widely and how independently it is being covered, and the day's selection
+                is packed greedily into a reading budget — with at least two independent outlets
+                required before anything makes the cut.
+            </p>
+
+            <div class="row g-4">
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">📋</span>
+                        <div class="feature-title">The brief</div>
+                        <div class="feature-desc">Ranked events with time, place, relevance and reading time; a neutral extractive summary where every sentence names the outlet that published it; and a timer tracking the 15-minute daily budget.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">🗺️</span>
+                        <div class="feature-title">World map</div>
+                        <div class="feature-desc">Events as markers — colour for macro-topic, size for relevance, a ring for "in today's brief" — plus country hotspots and dashed links between nations the same stories tie together. Leaflet and Natural Earth outlines, both vendored: no tile server, no key.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">⚖️</span>
+                        <div class="feature-title">Sides of the story</div>
+                        <div class="feature-desc">Articles grouped by the outlets' country or by editorial polarity — left, right, centre, state-government, independent-opposition — with the most central headline per side and a framing-divergence score. State and party media are included deliberately, and marked.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">🧭</span>
+                        <div class="feature-title">Places without a geocoder</div>
+                        <div class="feature-desc">A gazetteer of 197 countries with demonyms and exonyms in ten languages plus ~270 cities and hotspots, matched by token n-grams in one pass — with substring matching for Chinese, Japanese and Korean and guards against person names and overshadowed countries.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">🧠</span>
+                        <div class="feature-title">Models it trains itself</div>
+                        <div class="feature-desc">Keyword rules as weak supervision plus 220 seed headlines train 22 one-vs-rest logistic classifiers over hashed word and character n-grams, retrained on the live corpus at every refresh. A salience regressor learns newsworthiness from the app's own clustering and your feedback.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">🔤</span>
+                        <div class="feature-title">Offline translation</div>
+                        <div class="feature-desc">Argos/OpenNMT weights run by CTranslate2 — downloaded once, then used forever offline, pivoting through English where no direct pair exists. A SQLite translation memory means a headline costs ~20 ms once and nothing after.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="honesty-note mt-5">
+                <i>On honesty:</i> summaries are extractive, never generated — a sentence in the
+                brief is always a sentence somebody published, and it names its outlet. Leaning
+                labels are a reading aid drawn from widely cited assessments and each outlet's own
+                stated line, not a verdict. Translation is machine translation running on a laptop:
+                reliable for the gist of a headline, unreliable for the exact wording of a quotation,
+                which is why the original is always one click away and the interface says so.
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap">
+        <div class="container">
+            <div class="section-eyebrow mb-2">Under the hood</div>
+            <h2 class="display-5 fw-bold mb-4">The pipeline, stage by stage</h2>
+            <div class="req-table">
+                <div class="req-row"><span class="req-key">Fetch</span><span class="req-val">Async httpx + feedparser, 24 concurrent, per-feed health recorded</span></div>
+                <div class="req-row"><span class="req-key">Store</span><span class="req-val">SQLite, 14-day retention, per-article feature cache invalidated by a version stamp</span></div>
+                <div class="req-row"><span class="req-key">Events</span><span class="req-val">TF-IDF cosine agglomeration per language, centroid check against chaining, cross-language merge on shared places</span></div>
+                <div class="req-row"><span class="req-key">Ranking</span><span class="req-val">Coverage breadth, category gravity, tier-1 bonus, recency decay, predicted salience, contestedness, your feedback</span></div>
+                <div class="req-row"><span class="req-key">Summary</span><span class="req-val">Unsupervised extractive — sentence centroid relevance with MMR diversity, attributed per sentence</span></div>
+                <div class="req-row"><span class="req-key">API / UI</span><span class="req-val">FastAPI JSON API; vanilla JS and Leaflet, no framework, no CDN</span></div>
+                <div class="req-row"><span class="req-key">Desktop shell</span><span class="req-val">One process: uvicorn on a loopback port, the refresh scheduler, and a native WKWebView / WebView2 / WebKitGTK window over it</span></div>
+                <div class="req-row"><span class="req-key">Packaging</span><span class="req-val">PyInstaller for three desktop systems with native installers; a Kotlin client for Android; every icon drawn by <code>make_icons.py</code></span></div>
+                <div class="req-row"><span class="req-key">Full refresh</span><span class="req-val">~100 s for 700 feeds and 23,000 articles on an Apple-silicon Mac — 3 s of that clustering, ~5 s training and classification</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap" id="downloads" style="background: rgba(255,255,255,0.015);">
+        <div class="container">
+            <div class="section-eyebrow mb-2">Downloads</div>
+            <h2 class="display-5 fw-bold mb-3">Every platform</h2>
+            <p class="lead mb-5" style="color: rgba(255,255,255,0.7); max-width: 720px;">
+                One click on the icon starts everything — server, refresh scheduler and window are
+                a single process, and closing the window leaves the news being collected in the
+                background. The Windows and Linux installers are built from the same tree with
+                <code>packaging/build.sh</code>.
+            </p>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="dl-card">
+                        <h3>macOS 11+</h3>
+                        <div class="dl-note">Drag it into Applications. Closing the window hides the app; the Dock icon brings it back, ⌘Q quits it. The build is unsigned, so the first launch needs a right-click → Open.</div>
+                        <div><a href="world-brief/WorldBrief-1.0.0.dmg" class="btn-dl-sm primary" download>⬇ Download .dmg — 69 MB</a>
+                            <div class="dl-hash">
+                                <span class="hash-label">MD5</span>
+                                <span class="hash-value">ac4ffdd31c26058c8f8ee878ec527b4d</span>
+                                <button class="btn-copy" onclick="copyHash(this)">Copy</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="dl-card">
+                        <h3>Android 8+</h3>
+                        <div class="dl-note">A reader for the copy on your own computer — it can find it on your network for you. It keeps the current brief cached, so it opens instantly and reads offline. The phone never runs the pipeline; clustering 23,000 articles is work for a laptop.</div>
+                        <div><a href="world-brief/WorldBrief-1.0.0.apk" class="btn-dl-sm primary" download>⬇ Download .apk — 1.7 MB</a>
+                            <div class="dl-hash">
+                                <span class="hash-label">MD5</span>
+                                <span class="hash-value">c5b0b2e0984393e92d81c76463e491a9</span>
+                                <button class="btn-copy" onclick="copyHash(this)">Copy</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="dl-card">
+                        <h3>Windows 10+ · Linux</h3>
+                        <div class="dl-note">Installs for one user, no administrator needed, and lives in the notification area while it refreshes. Linux ships as <code>.deb</code>, <code>.AppImage</code> or a <code>--user</code> tarball. Build either from the source tree below.</div>
+                        <div><a href="https://github.com/WpyGG4125/WpyGG4125.github.io/tree/main/source/world-brief/packaging" class="btn-dl-sm" target="_blank" rel="noopener">📦 Build instructions</a></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="dl-card">
+                        <h3>From a checkout</h3>
+                        <div class="dl-note">Run <code>./run.sh</code> for the web UI on <code>localhost:8011</code>, or <code>python -m desktop.main</code> for the native window against the checkout. The first launch spends a few minutes on ~700 feeds before the first brief appears.</div>
+                        <div><a href="https://github.com/WpyGG4125/WpyGG4125.github.io/tree/main/source/world-brief" class="btn-dl-sm" target="_blank" rel="noopener">&lt;/&gt; Source tree</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap">
+        <div class="container">
+            <div class="section-eyebrow mb-2">Source &amp; process</div>
+            <h2 class="display-5 fw-bold mb-4">How this was built</h2>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="source-card">
+                        <h3>&lt;/&gt; Read the source</h3>
+                        <p>
+                            The full tree — backend pipeline, FastAPI service, vanilla-JS frontend,
+                            desktop shell, Kotlin Android client and the packaging scripts for all
+                            four platforms — is in this site's repository.
+                        </p>
+                        <p class="mb-4">
+                            <code>backend/</code> · <code>frontend/</code> · <code>desktop/</code> ·
+                            <code>android/</code> · <code>packaging/</code> · <code>tools/</code>
+                        </p>
+                        <a href="https://github.com/WpyGG4125/WpyGG4125.github.io/tree/main/source/world-brief" class="btn-dl-sm primary" target="_blank" rel="noopener">Browse source on GitHub →</a>
+                        <p class="mt-4 mb-0" style="font-size: .88rem; color: rgba(255,255,255,0.45);">
+                            Datasets, downloaded translation models and build output are not in the
+                            repository — the app fetches or builds what it needs on first run.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="source-card">
+                        <h3>🤝 Built with Claude, directed by me</h3>
+                        <p>
+                            I used Claude as an implementation assistant throughout: boilerplate
+                            generation, unit-test scaffolding, and accelerated front-end visuals.
+                            The engineering judgement is mine.
+                        </p>
+                        <ul class="role-list">
+                            <li>I conceptualised the architecture — the pipeline stages, the local-first constraint, and the decision that no external AI service or API key would ever be involved.</li>
+                            <li>I peer-reviewed the code that came back, and rejected or reworked what did not fit the design.</li>
+                            <li>I debugged the inconsistencies and functional flaws — clustering that chained across unrelated stories, gazetteer false positives, translation pivots, packaging failures.</li>
+                            <li>I guided Claude throughout, deciding what to build next and how each piece should behave.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <a href="../projects.html">← Back to all projects</a>
+        <div class="mt-2">&copy; <span id="year"></span> Pengyue Wang.</div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        function copyHash(btn) {
+            const row = btn.closest('.hash-row, .dl-hash');
+            const hash = row.querySelector('.hash-value').textContent.trim();
+
+            function showCopied() {
+                const original = btn.textContent;
+                btn.textContent = '✓ Copied';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = original;
+                    btn.classList.remove('copied');
+                }, 1800);
+            }
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(hash).then(showCopied).catch(() => {});
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = hash;
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); showCopied(); } catch (e) {}
+                document.body.removeChild(ta);
+            }
+        }
+    </script>
+</body>
+</html>

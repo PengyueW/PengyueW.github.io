@@ -1,0 +1,11 @@
+fastapi>=0.115
+uvicorn[standard]>=0.30
+httpx>=0.27
+feedparser>=6.0
+scikit-learn>=1.5
+numpy>=1.26
+# Offline translation: runs open-source Argos/OpenNMT models locally. No API key, no service.
+# If these two cannot be installed on your platform, everything else still works; the Languages
+# tab will simply say the translation engine is missing.
+ctranslate2>=4.0,<5
+sentencepiece>=0.2,<0.3

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Only the settings are worth backing up: the server address and the refresh preferences. The
+  cached brief is a copy of something the user's own computer can hand over again in seconds.
+-->
+<full-backup-content>
+    <include domain="sharedpref" path="worldbrief.xml" />
+</full-backup-content>

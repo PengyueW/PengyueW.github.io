@@ -84,6 +84,78 @@
         .badge-live { background: rgba(32, 201, 151, 0.18); color: #20c997; }
         .badge-progress { background: rgba(255, 193, 7, 0.18); color: #ffc107; }
 
+        .project-banner.worldbrief { background: linear-gradient(135deg, #0b4f6c, #1b98e0); }
+
+        .project-card-wrap {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: all .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .project-card-wrap:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255,255,255,0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .project-card-wrap .project-card {
+            background: none;
+            border: none;
+            border-radius: 0;
+            flex-grow: 1;
+            transition: none;
+        }
+
+        .project-card-wrap .project-card:hover { transform: none; box-shadow: none; }
+
+        .card-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 0 28px 24px;
+        }
+
+        .card-link {
+            font-size: .85rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: rgba(255,255,255,0.75);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 8px;
+            padding: 7px 14px;
+            transition: all .25s ease;
+        }
+
+        .card-link:hover {
+            color: white;
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.35);
+        }
+
+        .source-note {
+            border: 1px solid rgba(32, 201, 151, 0.25);
+            background: rgba(32, 201, 151, 0.07);
+            border-radius: 16px;
+            padding: 26px 30px;
+            color: rgba(255,255,255,0.72);
+            font-size: .95rem;
+        }
+
+        .source-note a { color: #20c997; }
+
+        .source-note code {
+            background: rgba(255,255,255,0.1);
+            padding: 2px 7px;
+            border-radius: 5px;
+            font-size: .88em;
+        }
+
         .more-soon {
             border: 1px dashed rgba(255,255,255,0.15);
             border-radius: 18px;
@@ -127,34 +199,71 @@
 
         <div class="row g-4">
             <div class="col-md-6">
-                <a href="projects/continuum.html" class="project-card">
-                    <div class="project-banner continuum">🧹</div>
-                    <div class="project-body">
-                        <span class="badge-status badge-live">Available now</span>
-                        <h3 class="fw-bold mt-3">Continuum</h3>
-                        <p style="color: rgba(255,255,255,0.7);">A free, native macOS control center for cleaning, disk visualization, security scanning, hardware telemetry and app management. No ads, no trackers, no subscriptions.</p>
+                <div class="project-card-wrap">
+                    <a href="projects/continuum.html" class="project-card">
+                        <div class="project-banner continuum">🧹</div>
+                        <div class="project-body">
+                            <span class="badge-status badge-live">Available now</span>
+                            <h3 class="fw-bold mt-3">Continuum</h3>
+                            <p style="color: rgba(255,255,255,0.7);">A free, native macOS control center for cleaning, disk visualization, security scanning, hardware telemetry and app management. No ads, no trackers, no subscriptions.</p>
+                        </div>
+                    </a>
+                    <div class="card-links">
+                        <a href="projects/continuum.html" class="card-link">Project page →</a>
+                        <a href="https://github.com/WpyGG4125/WpyGG4125.github.io/tree/main/source/continuum" class="card-link" target="_blank" rel="noopener">&lt;/&gt; Source code</a>
+                        <a href="projects/continuum.html#downloads" class="card-link">⬇ Download</a>
                     </div>
-                </a>
+                </div>
             </div>
             <div class="col-md-6">
-                <a href="projects/music-ml.html" class="project-card">
-                    <div class="project-banner musicml">🎹</div>
-                    <div class="project-body">
-                        <span class="badge-status badge-progress">In development</span>
-                        <h3 class="fw-bold mt-3">Composer-Conditioned Music Generation</h3>
-                        <p style="color: rgba(255,255,255,0.7);">A decoder-only transformer trained from scratch on 68 classical composers, conditioned on music theory, with natural-language prompting planned next.</p>
+                <div class="project-card-wrap">
+                    <a href="projects/world-brief.html" class="project-card">
+                        <div class="project-banner worldbrief">🌍</div>
+                        <div class="project-body">
+                            <span class="badge-status badge-live">Available now</span>
+                            <h3 class="fw-bold mt-3">World Brief</h3>
+                            <p style="color: rgba(255,255,255,0.7);">Fifteen minutes of world news a day instead of browsing news sites: ~700 feeds from all 197 nations, clustered into events, mapped, ranked and translated entirely on your own machine — no AI service, no API key, no server.</p>
+                        </div>
+                    </a>
+                    <div class="card-links">
+                        <a href="projects/world-brief.html" class="card-link">Project page →</a>
+                        <a href="https://github.com/WpyGG4125/WpyGG4125.github.io/tree/main/source/world-brief" class="card-link" target="_blank" rel="noopener">&lt;/&gt; Source code</a>
+                        <a href="projects/world-brief.html#downloads" class="card-link">⬇ Download</a>
                     </div>
-                </a>
+                </div>
             </div>
             <div class="col-md-6">
-                <a href="projects/china-map.html" class="project-card">
-                    <div class="project-banner chinamap">🏯</div>
-                    <div class="project-body">
-                        <span class="badge-status badge-live">Available now</span>
-                        <h3 class="fw-bold mt-3">华夏五千年 · Historical Territories Timeline Map</h3>
-                        <p style="color: rgba(255,255,255,0.7);">A zero-dependency static map of every Chinese dynasty and neighbouring power's territory, driven by a timeline from 8000 BCE to today — 137 polities, 538 monarchs, zoomable down to the day.</p>
+                <div class="project-card-wrap">
+                    <a href="projects/music-ml.html" class="project-card">
+                        <div class="project-banner musicml">🎹</div>
+                        <div class="project-body">
+                            <span class="badge-status badge-progress">In development</span>
+                            <h3 class="fw-bold mt-3">Composer-Conditioned Music Generation</h3>
+                            <p style="color: rgba(255,255,255,0.7);">A decoder-only transformer trained from scratch on 68 classical composers, conditioned on music theory, with natural-language prompting planned next.</p>
+                        </div>
+                    </a>
+                    <div class="card-links">
+                        <a href="projects/music-ml.html" class="card-link">Project page →</a>
+                        <a href="https://github.com/WpyGG4125/WpyGG4125.github.io/tree/main/source/music-ml" class="card-link" target="_blank" rel="noopener">&lt;/&gt; Source code</a>
                     </div>
-                </a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="project-card-wrap">
+                    <a href="projects/china-map.html" class="project-card">
+                        <div class="project-banner chinamap">🏯</div>
+                        <div class="project-body">
+                            <span class="badge-status badge-live">Available now</span>
+                            <h3 class="fw-bold mt-3">华夏五千年 · Historical Territories Timeline Map</h3>
+                            <p style="color: rgba(255,255,255,0.7);">A zero-dependency static map of every Chinese dynasty and neighbouring power's territory, driven by a timeline from 8000 BCE to today — 137 polities, 538 monarchs, zoomable down to the day.</p>
+                        </div>
+                    </a>
+                    <div class="card-links">
+                        <a href="projects/china-map.html" class="card-link">Project page →</a>
+                        <a href="projects/china-map/index.html" class="card-link">🗺 Live demo</a>
+                        <a href="https://github.com/WpyGG4125/WpyGG4125.github.io/tree/main/source/china-map" class="card-link" target="_blank" rel="noopener">&lt;/&gt; Source code</a>
+                    </div>
+                </div>
             </div>
             <div class="col-md-6">
                 <div class="more-soon">
@@ -162,6 +271,14 @@
                     <div>More projects coming soon.</div>
                 </div>
             </div>
+        </div>
+
+        <div class="source-note mt-5">
+            <strong>Every project above is open.</strong> The complete source code for all four lives in
+            <a href="https://github.com/WpyGG4125/WpyGG4125.github.io/tree/main/source" target="_blank" rel="noopener">this site's own repository, under <code>source/</code></a>
+            — nothing is a screenshot of something you cannot read. I architect and direct these
+            projects and review every line; Claude assists with implementation. Each project page
+            says exactly how that division of labour worked.
         </div>
     </div>
 

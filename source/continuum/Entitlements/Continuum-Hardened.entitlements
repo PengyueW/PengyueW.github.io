@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!--
+    Direct-distribution profile. There is deliberately NO
+    com.apple.security.app-sandbox key:
+
+    - The cleaner needs to enumerate ~/Library/Caches, ~/Library/Logs and
+      DerivedData directly.
+    - Full Disk Access (TCC kTCCServiceSystemPolicyAllFiles) only grants real
+      root-level visibility — for the treemap and the forensic security tier —
+      to NON-sandboxed processes.
+    - The security division spawns the bundled Python engine as a child
+      process, which inherits this process's TCC grants.
+
+    Sign with Hardened Runtime (codesign \-\-options runtime). For public
+    distribution, sign with a Developer ID identity and notarize.
+    -->
+
+    <!--
+    Required by the macOS 11 / 10.15 builds. Those targets ship
+    Contents/Frameworks/libswift_Concurrency.dylib (the toolchain's Swift
+    Concurrency back-deployment runtime), because /usr/lib/swift only gained
+    that dylib in macOS 12.
+
+    The Hardened Runtime turns on *library validation*, which refuses to map
+    any dylib that is neither a platform binary nor signed with the same Team
+    ID as the main executable. A locally signed build (self-signed or ad-hoc)
+    has no Team ID at all, so AMFI rejects the bundled runtime — "mapped file
+    has no Team ID and is not a platform binary" — and dyld aborts at the first
+    `actor` / `async` call with:
+
+        can't resolve symbol _swift_defaultActor_initialize … because dependent
+        dylib @rpath/libswift_Concurrency.dylib could not be loaded
+
+    macOS 12+ never hit this: there /usr/lib/swift wins the rpath search and
+    the bundled copy is never mapped, which is why only 11 and 10.15 crashed.
+    Disabling library validation is Apple's sanctioned answer for shipping a
+    dylib the signing identity does not own; it remains compatible with
+    Developer ID signing and notarization.
+    -->
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <true/>
+</dict>
+</plist>

@@ -427,6 +427,56 @@
             .hero-inner h1 { font-size: 2.3rem; }
             .hash-row { font-size: .68rem; padding: 10px; }
         }
+        /* ---------- Source & process ---------- */
+        .source-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 18px;
+            padding: 34px;
+            height: 100%;
+        }
+
+        .source-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
+        .source-card p { color: rgba(255,255,255,0.65); font-size: .95rem; }
+
+        .role-list { list-style: none; padding-left: 0; margin: 0; }
+        .role-list li {
+            padding: 9px 0 9px 26px;
+            position: relative;
+            color: rgba(255,255,255,0.72);
+            font-size: .95rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .role-list li:last-child { border-bottom: none; }
+        .role-list li::before {
+            content: "\25B8";
+            position: absolute;
+            left: 4px;
+            color: var(--c-blue-2);
+        }
+
+        .btn-source {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--c-blue-1), var(--c-blue-2));
+            border: none;
+            border-radius: 10px;
+            padding: 11px 22px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: .95rem;
+            transition: transform .25s ease, filter .25s ease;
+        }
+
+        .btn-source:hover { transform: translateY(-2px); filter: brightness(1.15); color: white; }
+
+        code {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 7px;
+            border-radius: 5px;
+            color: var(--c-blue-2);
+            font-size: .88em;
+        }
     </style>
 </head>
 <body>
@@ -772,6 +822,51 @@
                         </div>
                     </div>
                     <a href="continuum/Continuum-1.0.2.dmg" class="btn-dl-sm" download>⬇ Download</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap">
+        <div class="container">
+            <div class="section-eyebrow mb-2">Source &amp; process</div>
+            <h2 class="display-5 fw-bold mb-4">How this was built</h2>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="source-card">
+                        <h3>&lt;/&gt; Read the source</h3>
+                        <p>
+                            The full tree is in this site's repository: eleven Swift packages for the
+                            SwiftUI app and its feature kits, the Python scanning engine behind the
+                            security module, the entitlements and localisations, and the build script
+                            that produces every one of the four macOS builds from the single source tree.
+                        </p>
+                        <p class="mb-4">
+                            <code>Sources/</code> · <code>Engine/</code> · <code>Resources/</code> ·
+                            <code>Entitlements/</code> · <code>scripts/</code> · <code>build.sh</code>
+                        </p>
+                        <a href="https://github.com/WpyGG4125/WpyGG4125.github.io/tree/main/source/continuum" class="btn-source" target="_blank" rel="noopener">Browse source on GitHub →</a>
+                        <p class="mt-4 mb-0" style="font-size: .88rem; color: rgba(255,255,255,0.45);">
+                            Build output, the Swift package cache and signing material are not in the
+                            repository — <code>build.sh</code> produces every macOS build from this tree.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="source-card">
+                        <h3>🤝 Built with Claude, directed by me</h3>
+                        <p>
+                            I used Claude as an implementation assistant throughout: boilerplate
+                            generation, unit-test scaffolding, and accelerated front-end visuals.
+                            The engineering judgement is mine.
+                        </p>
+                        <ul class="role-list">
+                            <li>I conceptualised the architecture — the split into independent feature kits, the privileged-task and secure-store boundaries, and the compatibility layer that lets one code base target macOS 10.15 through 26.</li>
+                            <li>I peer-reviewed every change that came back, and reworked what did not fit the design or the safety policy.</li>
+                            <li>I debugged the inconsistencies and functional flaws — sandbox and TCC permission edge cases, cache-cleaning safety rules, SMART parsing on unusual drives, and back-deployment breakages across four SDK versions.</li>
+                            <li>I guided Claude throughout, deciding which module came next and exactly how it should behave.</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

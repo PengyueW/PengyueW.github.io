@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>华夏五千年 · 历史疆域时间地图</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏯</text></svg>">
+</head>
+<body>
+
+<!-- 地图 -->
+<div id="map"></div>
+
+<!-- 顶栏 -->
+<header id="topbar">
+  <div id="brand"><b>华夏五千年</b><span>历史疆域时间地图 · 前8000 — 今</span></div>
+  <div id="datebox">
+    <div id="bigdate">—</div>
+    <div id="eraline">—</div>
+  </div>
+  <div class="spacer"></div>
+  <button class="tbtn" id="helpbtn">图例·帮助</button>
+  <button class="tbtn" id="srcbtn">来源·考据</button>
+</header>
+
+<!-- 浮动面板 (帝王/政权) -->
+<aside class="panel" id="panel"></aside>
+
+<!-- 政权详情卡 -->
+<aside class="card" id="card"></aside>
+
+<!-- 时间轴 -->
+<footer id="timeline">
+  <div id="tl-top">
+    <button id="playbtn" title="播放/暂停 (空格)">▶</button>
+    <select id="speed" title="播放速度">
+      <option value="0.3">慢速</option>
+      <option value="1" selected>常速</option>
+      <option value="3">快速</option>
+    </select>
+    <div id="tl-zoom">
+      <button id="tl-in" title="以当前时刻为中心放大一级">＋ 放大</button>
+      <button id="tl-out" title="退回上一级">－ 缩小</button>
+      <button id="tl-reset" title="回到全览">全览</button>
+      <span id="tl-range"></span>
+    </div>
+    <span id="tl-hint">「＋放大」以当前时刻为中心逐级细化, 最深以「日」为单位微调</span>
+  </div>
+  <div id="tl-track">
+    <canvas id="tl-canvas"></canvas>
+    <div id="tl-thumb"></div>
+  </div>
+</footer>
+
+<!-- 来源弹窗 -->
+<div class="modal" id="modal"></div>
+
+<!-- 帮助弹窗 -->
+<div class="modal" id="helpmodal">
+  <div class="mbox">
+    <div class="mhead"><h2>图例与操作</h2><button class="x" id="hx">✕</button></div>
+    <div class="mbody">
+      <h3>地图</h3>
+      <ul class="hlist">
+        <li><b>色块</b> — 同一时刻并存的各政权疆域, 以对比色区分, 中心标注国号简称(如「宋」「明」)。</li>
+        <li><b>条纹区 <span class="stripe-demo"></span></b> — 两个(或多个)政权拉锯、交战或归属存争的地带, 以双方颜色相间的斜纹表示(如宋金淮南拉锯、蒙宋川蜀之争、抗战沦陷区)。</li>
+        <li><b>悬停</b>色块查看政权起讫;<b>点击</b>弹出详情(都城·开创者·人口·结局·出处)。</li>
+        <li>滚轮缩放地图, 拖拽平移。</li>
+      </ul>
+      <h3>时间轴</h3>
+      <ul class="hlist">
+        <li>点击或拖动时间轴改变年代; <b>◀ ▶</b> 方向键微调; 空格键播放/暂停。</li>
+        <li><b>＋放大 / －缩小 / 全览</b> 按钮 — 以当前时刻为中心逐级放缩时间轴, 最深可达以「日」为单位(如可停在 1234年2月9日 蔡州城破当日, 目睹金末帝半日而亡)。</li>
+      </ul>
+      <h3>左侧浮窗</h3>
+      <ul class="hlist">
+        <li><b>帝王页</b> — 当前时刻所有在位君主: 名讳·庙号·谥号·年号(第几年)·生卒·现龄·前后任; 头像为程序生成的印章式示意(名讳末字), 非历史画像。</li>
+        <li><b>政权页</b> — 当前并存政权清单, 进度条指示其国祚已历/所余比例; 点击可查看详情。</li>
+        <li>浮窗可拖动标题栏移动, 「—」可折叠。</li>
+      </ul>
+      <h3>数据说明</h3>
+      <ul class="hlist">
+        <li>疆界为依据《中国历史地图集》(谭其骧)等文献概化的示意, 详见「来源·考据」。</li>
+        <li>渲染时程序自动将疆界<b>贴合真实海岸线</b>、将相邻政权边界<b>缝合对齐</b>并平滑; 刻意保留的拉锯重叠区仍以条纹显示。</li>
+        <li>时间轴末端(1950年起)为<b>现代中国全图</b>(含台湾岛与海南岛)。</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 数据 -->
+<script src="data/basemap.js"></script>
+<script src="data/sources.js"></script>
+<script src="data/polities_pre.js"></script>
+<script src="data/polities_mid.js"></script>
+<script src="data/polities_late.js"></script>
+<script src="data/emperors1.js"></script>
+<script src="data/emperors2.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

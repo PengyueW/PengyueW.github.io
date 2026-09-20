@@ -1,0 +1,73 @@
+#!/bin/sh
+# MacScan launcher — runs the macscan package with the bundled source tree.
+# PYTHONDONTWRITEBYTECODE keeps Python from writing __pycache__ next to the
+# sources, which matters when this copy lives inside a signed app bundle.
+#
+# Finding an interpreter is the delicate part. `/usr/bin/env python3` used to be
+# good enough, but on a Mac that has never had Xcode or the Command Line Tools
+# installed, /usr/bin/python3 is not Python at all — it is a stub that prints
+#
+#   xcrun: error: invalid active developer path (/Library/Developer/
+#   CommandLineTools), missing xcrun at: …/usr/bin/xcrun
+#
+# and exits non-zero. That is what "running scan returns an xcrun error" was:
+# not a bug in the engine, but the engine never starting. The stub is on PATH
+# and looks like a working python3 to `env`, so it has to be filtered out by
+# actually running each candidate rather than by testing for existence.
+DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# A candidate qualifies only if it starts and reports a new enough version.
+# The engine uses dataclasses, so 3.7 is the floor.
+usable() {
+    [ -x "$1" ] || command -v "$1" >/dev/null 2>&1 || return 1
+    "$1" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 7) else 1)' \
+        >/dev/null 2>&1
+}
+
+PY=""
+# MACSCAN_PYTHON lets a user point at their own interpreter and wins outright.
+for candidate in \
+    "${MACSCAN_PYTHON:-}" \
+    /usr/local/bin/python3 \
+    /opt/homebrew/bin/python3 \
+    /Library/Frameworks/Python.framework/Versions/Current/bin/python3 \
+    /usr/bin/python3 \
+    python3
+do
+    [ -n "$candidate" ] || continue
+    if usable "$candidate"; then PY="$candidate"; break; fi
+done
+
+# Last resort: any versioned python3.x on PATH or in the usual prefixes.
+if [ -z "$PY" ]; then
+    for candidate in \
+        /usr/local/bin/python3.* /opt/homebrew/bin/python3.* \
+        /Library/Frameworks/Python.framework/Versions/3.*/bin/python3
+    do
+        if usable "$candidate"; then PY="$candidate"; break; fi
+    done
+fi
+
+if [ -z "$PY" ]; then
+    # Report it as the engine's own JSON error shape where possible, and always
+    # say the actionable thing on stderr. Exit 127 = "interpreter not found".
+    cat >&2 <<'MSG'
+macscan: no usable Python 3 interpreter found.
+
+The security engine is written in Python 3. macOS does not ship one by default
+on this system — /usr/bin/python3 here is the Command Line Tools stub, which is
+why you may have seen an "xcrun: invalid active developer path" error.
+
+Install one of the following, then run the scan again:
+  • Apple's Command Line Tools:  xcode-select --install
+  • Homebrew Python:             brew install python3
+  • python.org's installer:      https://www.python.org/downloads/macos/
+
+Or point Continuum at an interpreter you already have by setting
+MACSCAN_PYTHON to its full path.
+MSG
+    printf '{"error":"python3-missing","message":"No usable Python 3 interpreter was found. Install the Command Line Tools (xcode-select --install) or Homebrew Python, then run the scan again."}\n'
+    exit 127
+fi
+
+PYTHONPATH="$DIR/src" PYTHONDONTWRITEBYTECODE=1 exec "$PY" -m macscan "$@"

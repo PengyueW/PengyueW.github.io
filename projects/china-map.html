@@ -269,6 +269,56 @@
             .hero-inner h1 { font-size: 2.1rem; }
             .hero-inner h1 .cn { font-size: 1.5rem; }
         }
+        /* ---------- Source & process ---------- */
+        .source-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 18px;
+            padding: 34px;
+            height: 100%;
+        }
+
+        .source-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
+        .source-card p { color: rgba(255,255,255,0.65); font-size: .95rem; }
+
+        .role-list { list-style: none; padding-left: 0; margin: 0; }
+        .role-list li {
+            padding: 9px 0 9px 26px;
+            position: relative;
+            color: rgba(255,255,255,0.72);
+            font-size: .95rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .role-list li:last-child { border-bottom: none; }
+        .role-list li::before {
+            content: "\25B8";
+            position: absolute;
+            left: 4px;
+            color: var(--hm-gold-2);
+        }
+
+        .btn-source {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--hm-red-1), var(--hm-gold-1));
+            border: none;
+            border-radius: 10px;
+            padding: 11px 22px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: .95rem;
+            transition: transform .25s ease, filter .25s ease;
+        }
+
+        .btn-source:hover { transform: translateY(-2px); filter: brightness(1.15); color: white; }
+
+        code {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 7px;
+            border-radius: 5px;
+            color: var(--hm-gold-2);
+            font-size: .88em;
+        }
     </style>
 </head>
 <body>
@@ -420,6 +470,50 @@
                 <div class="req-row"><span class="req-key">Rendering</span><span class="req-val">Custom projection + canvas timeline, no map library</span></div>
                 <div class="req-row"><span class="req-key">Basemap</span><span class="req-val">Natural Earth 1:50m coastline/river/lake data (public domain)</span></div>
                 <div class="req-row"><span class="req-key">Language</span><span class="req-val">Simplified Chinese UI and content</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap" style="background: rgba(255,255,255,0.015);">
+        <div class="container">
+            <div class="section-eyebrow mb-2">Source &amp; process</div>
+            <h2 class="display-5 fw-bold mb-4">How this was built</h2>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="source-card">
+                        <h3>&lt;/&gt; Read the source</h3>
+                        <p>
+                            Everything the map runs on is in this site's repository, and it is the same
+                            code the live demo above serves — no build step, no bundler, no dependencies.
+                            The historical data lives in plain JavaScript files you can read and correct.
+                        </p>
+                        <p class="mb-4">
+                            <code>index.html</code> · <code>js/app.js</code> · <code>css/style.css</code> ·
+                            <code>data/polities_*.js</code> · <code>data/emperors*.js</code> · <code>data/basemap.js</code>
+                        </p>
+                        <a href="https://github.com/WpyGG4125/WpyGG4125.github.io/tree/main/source/china-map" class="btn-source" target="_blank" rel="noopener">Browse source on GitHub →</a>
+                        <p class="mt-4 mb-0" style="font-size: .88rem; color: rgba(255,255,255,0.45);">
+                            Nothing else is needed: clone it, open <code>index.html</code>, and the map runs —
+                            the same way the live demo above does.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="source-card">
+                        <h3>🤝 Built with Claude, directed by me</h3>
+                        <p>
+                            I used Claude as an implementation assistant throughout: boilerplate
+                            generation, unit-test scaffolding, and accelerated front-end visuals.
+                            The engineering judgement is mine.
+                        </p>
+                        <ul class="role-list">
+                            <li>I conceptualised the architecture — the zero-dependency constraint, the keyframe-and-interpolate model for shifting borders, and the separation of historical data from the rendering engine.</li>
+                            <li>I peer-reviewed the code and the historical data, and corrected the territory and dating claims against the atlases and chronologies cited in the Sources panel.</li>
+                            <li>I debugged the inconsistencies and functional flaws — seams between neighbouring polities, coastline clipping against Natural Earth geography, timeline zoom behaviour, and centroid label placement.</li>
+                            <li>I guided Claude throughout, deciding which periods and features to build next and how each should behave.</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

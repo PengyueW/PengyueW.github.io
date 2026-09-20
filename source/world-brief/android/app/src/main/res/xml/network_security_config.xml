@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  World Brief runs on a machine the user owns, reached over their own network, so the connection
+  is plain HTTP to a private address. Cleartext is allowed for exactly those ranges and nowhere
+  else: anything on the public internet must still be HTTPS.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">localhost</domain>
+        <domain includeSubdomains="false">127.0.0.1</domain>
+        <domain includeSubdomains="false">10.0.2.2</domain>        <!-- the emulator's host -->
+        <domain includeSubdomains="true">local</domain>            <!-- name.local via mDNS -->
+        <domain includeSubdomains="true">home.arpa</domain>
+    </domain-config>
+</network-security-config>

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World Brief</title>
+<meta name="description" data-i18n-content="app.description" content="Fifteen minutes a day: the world's important events, from every nation's press, with both sides shown.">
+<link rel="stylesheet" href="/static/vendor/leaflet/leaflet.min.css">
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <span class="logo" aria-hidden="true"></span>
+    <div><h1 data-i18n="app.title">World Brief</h1><div class="tagline" data-i18n="app.tagline">15 minutes a day. Every nation's press. Both sides.</div></div>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-view="brief" role="tab" data-i18n="nav.brief">Brief</button>
+    <button class="tab" data-view="map" role="tab" data-i18n="nav.map">World map</button>
+    <button class="tab" data-view="sources" role="tab" data-i18n="nav.sources">Sources</button>
+    <button class="tab" data-view="languages" role="tab" data-i18n="nav.languages">Languages</button>
+  </nav>
+
+  <div class="lang-picker">
+    <button class="ghost lang-btn" id="lang-btn" aria-haspopup="dialog" aria-expanded="false" data-i18n-title="nav.languages">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7">
+        <circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 2.6 15.4 0 18M12 3c-2.6 2.6-2.6 15.4 0 18"/>
+      </svg>
+      <span id="lang-btn-label">English</span>
+    </button>
+    <div class="lang-menu" id="lang-menu" role="dialog" hidden>
+      <label class="lm-row"><span data-i18n="lang.interface">Interface language</span>
+        <select id="ui-lang"></select></label>
+      <p class="lm-help" data-i18n="lang.interfaceHelp">Menus, labels and explanations.</p>
+      <label class="lm-row"><span data-i18n="lang.translateInto">Translate articles into</span>
+        <select id="tr-lang"></select></label>
+      <p class="lm-help" data-i18n="lang.translateHelp">Foreign-language headlines and summaries are translated as you read them.</p>
+      <button class="ghost lm-manage" id="lm-manage" data-i18n="lang.packages">Language packages</button>
+    </div>
+  </div>
+
+  <div class="timer" id="timer" data-i18n-title="timer.title" title="Your daily reading budget">
+    <svg viewBox="0 0 36 36" width="34" height="34" aria-hidden="true"><circle cx="18" cy="18" r="15.5" class="ring-bg"/><circle cx="18" cy="18" r="15.5" class="ring" id="ring"/></svg>
+    <div><div class="timer-num" id="timer-num">15:00</div><div class="timer-label" id="timer-label" data-i18n="timer.left">left today</div></div>
+    <button class="ghost" id="timer-toggle" data-i18n="timer.start">Start</button>
+  </div>
+</header>
+
+<div class="status" id="status" hidden></div>
+
+<main>
+  <!-- ---------------- BRIEF ---------------- -->
+  <section id="view-brief" class="view">
+    <div class="stats" id="stats"></div>
+    <div class="filters">
+      <div class="seg" id="mode">
+        <button data-mode="brief" class="active" data-i18n="mode.brief">Today's brief</button>
+        <button data-mode="all" data-i18n="mode.all">All events</button>
+        <button data-mode="discussed" data-i18n="mode.discussed">Most discussed</button>
+        <button data-mode="divergence" data-i18n="mode.divergence">Most contested</button>
+        <button data-mode="newest" data-i18n="mode.newest">Newest</button>
+      </div>
+      <select id="f-category"><option value="" data-i18n="filter.allTopics">All topics</option></select>
+      <select id="f-region"><option value="" data-i18n="filter.allRegions">All regions</option>
+        <option value="Europe" data-i18n="region.Europe">Europe</option>
+        <option value="Asia" data-i18n="region.Asia">Asia</option>
+        <option value="Africa" data-i18n="region.Africa">Africa</option>
+        <option value="Americas" data-i18n="region.Americas">Americas</option>
+        <option value="Oceania" data-i18n="region.Oceania">Oceania</option></select>
+      <select id="f-country"><option value="" data-i18n="filter.anyCountry">Any country</option></select>
+      <select id="f-hours">
+        <option value="" data-i18n="filter.hours48">Last 48h</option>
+        <option value="6" data-i18n="filter.hours6">Last 6h</option>
+        <option value="12" data-i18n="filter.hours12">Last 12h</option>
+        <option value="24" data-i18n="filter.hours24">Last 24h</option></select>
+      <input id="f-q" type="search" data-i18n-ph="filter.search" placeholder="Search events…">
+    </div>
+    <div class="split">
+      <div class="list" id="list" aria-live="polite"></div>
+      <aside class="detail" id="detail"><div class="empty" data-i18n="detail.placeholder">Select an event to read its summary, the perspectives and the sources.</div></aside>
+    </div>
+  </section>
+
+  <!-- ---------------- MAP ---------------- -->
+  <section id="view-map" class="view" hidden>
+    <div class="map-toolbar">
+      <div class="seg" id="map-layers">
+        <button data-layer="events" class="active" data-i18n="map.layerEvents">Events</button>
+        <button data-layer="hotspots" class="active" data-i18n="map.layerHotspots">Hotspots</button>
+        <button data-layer="edges" class="active" data-i18n="map.layerEdges">Relationships</button>
+      </div>
+      <select id="m-category"><option value="" data-i18n="filter.allTopics">All topics</option></select>
+      <select id="m-hours">
+        <option value="" data-i18n="filter.hours48">Last 48h</option>
+        <option value="6" data-i18n="filter.hours6">Last 6h</option>
+        <option value="12" data-i18n="filter.hours12">Last 12h</option>
+        <option value="24" data-i18n="filter.hours24">Last 24h</option></select>
+      <label class="range"><span data-i18n="map.minRelevance">Min relevance</span> <input id="m-rel" type="range" min="0" max="80" value="30"><span id="m-rel-v">30</span></label>
+      <label class="range"><input type="checkbox" id="m-single"> <span data-i18n="map.singleSource">single-source events</span></label>
+      <div class="legend">
+        <span><i class="dot g-conflict"></i><span data-i18n="map.legendConflict">Conflict &amp; crisis</span></span>
+        <span><i class="dot g-politics"></i><span data-i18n="map.legendPolitics">Politics &amp; diplomacy</span></span>
+        <span><i class="dot g-society"></i><span data-i18n="map.legendSociety">Economy, science &amp; society</span></span>
+        <span><i class="dot ring-only"></i><span data-i18n="map.legendBrief">In today's brief</span></span>
+        <span><i class="line"></i><span data-i18n="map.legendLine">Countries linked by a story</span></span>
+      </div>
+    </div>
+    <div class="map-wrap">
+      <div id="map" role="img" data-i18n-aria="map.ariaLabel" aria-label="World map of current events"></div>
+      <aside class="map-side" id="map-side"><div class="empty" data-i18n="map.sidePlaceholder">Click a marker or a hotspot.</div></aside>
+    </div>
+  </section>
+
+  <!-- ---------------- SOURCES ---------------- -->
+  <section id="view-sources" class="view" hidden>
+    <div class="sources-head">
+      <p data-i18n="sources.intro">Every outlet is labelled by its approximate editorial position and ownership.</p>
+      <div class="filters"><input id="s-q" type="search" data-i18n-ph="sources.filter" placeholder="Filter outlets, countries, leanings…">
+        <label><input type="checkbox" id="s-failing"> <span data-i18n="sources.onlyFailing">Only failing feeds</span></label></div>
+    </div>
+    <div id="sources"></div>
+  </section>
+
+  <!-- ---------------- LANGUAGES ---------------- -->
+  <section id="view-languages" class="view" hidden>
+    <div class="sources-head">
+      <h2 data-i18n="lang.heading">Languages</h2>
+      <p data-i18n="lang.intro">The interface and the news can be read in different languages.</p>
+    </div>
+    <div id="languages"></div>
+  </section>
+</main>
+
+<script src="/static/vendor/leaflet/leaflet.min.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>

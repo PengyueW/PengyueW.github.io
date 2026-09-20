@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">World Brief</string>
+
+    <string name="action_refresh">Refresh</string>
+    <string name="action_setup">Server</string>
+
+    <string name="setup_title">Where your brief comes from</string>
+    <string name="setup_explainer">World Brief gathers the news on a computer you own — the desktop app for macOS, Windows or Linux. This phone reads the brief from it, and keeps a copy for when you are offline.\n\nMake sure that computer is switched on and on the same network, then search for it.</string>
+    <string name="setup_scan">Search my network</string>
+    <string name="setup_scanning">Looking for World Brief…</string>
+    <string name="setup_none_found">Nothing found. Check the computer is awake and on this network, or type its address below.</string>
+    <string name="setup_address_hint">Address</string>
+    <string name="setup_address_helper">For example 192.168.1.20:8011</string>
+    <string name="setup_needs_address">Enter an address first.</string>
+    <string name="setup_checking">Checking…</string>
+    <string name="setup_saved_unreachable">Saved. That address is not answering right now — the computer may be asleep.</string>
+    <string name="setup_background">Keep a copy of the brief up to date</string>
+    <string name="setup_notify">Tell me when a new brief is ready</string>
+    <string name="setup_interval_hint">Check every (minutes)</string>
+    <string name="setup_save">Save</string>
+
+    <string name="offline_unreachable">Your computer is not answering.</string>
+    <string name="offline_not_configured">No World Brief server has been set up yet.</string>
+
+    <string name="notification_brief_title">Your brief is ready</string>
+    <string name="channel_brief_name">New briefs</string>
+    <string name="channel_brief_description">A quiet note when a new brief has been built.</string>
+
+    <plurals name="notification_brief_body">
+        <item quantity="one">%1$d event, about %2$d minutes of reading.</item>
+        <item quantity="other">%1$d events, about %2$d minutes of reading.</item>
+    </plurals>
+
+    <plurals name="setup_found">
+        <item quantity="one">Found %d World Brief server.</item>
+        <item quantity="other">Found %d World Brief servers.</item>
+    </plurals>
+</resources>
