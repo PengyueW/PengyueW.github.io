@@ -9,6 +9,11 @@ The complete source for every project shown on
 | **World Brief** | A local-first world news reader: ~700 feeds from 197 nations clustered into events, geolocated, ranked and translated entirely on your own machine. Python/FastAPI, vanilla JS, Kotlin. | [`world-brief/`](world-brief) | [Page](https://wpygg4125.github.io/projects/world-brief.html) |
 | **Composer-Conditioned Music Generation** | A decoder-only transformer trained from scratch on 68 classical composers, conditioned on composer, era and music theory. PyTorch. | [`music-ml/`](music-ml) | [Page](https://wpygg4125.github.io/projects/music-ml.html) |
 | **华夏五千年 · Historical Territories Timeline Map** | A zero-dependency static map of 137 Chinese and neighbouring polities across a timeline from 8000 BCE to today. Vanilla HTML/CSS/JS. | [`china-map/`](china-map) | [Page](https://wpygg4125.github.io/projects/china-map.html) · [Live](https://wpygg4125.github.io/projects/china-map/index.html) |
+| **Markdown Peek** | A Quick Look extension for macOS: press Space on a `.md` file to see it rendered, and edit it in place. Swift, Apple frameworks only, with its own Markdown renderer. | [`markdown-preview/`](markdown-preview) | [Page](https://wpygg4125.github.io/projects/markdown-preview.html) |
+
+Wind Rider, a game I'm building with five teammates, isn't in this folder: its code lives in
+[the team's repository](https://github.com/Nengeldir/ItWorksOnMyMachine), and its page is
+[here](https://wpygg4125.github.io/projects/wind-rider.html).
 
 Each directory carries its own README with the architecture, how to build or run it, and its
 licence where one applies.

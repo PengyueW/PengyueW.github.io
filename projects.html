@@ -86,6 +86,9 @@
         .badge-progress { background: rgba(255, 193, 7, 0.18); color: #ffc107; }
 
         .project-banner.worldbrief { background: linear-gradient(135deg, #0b4f6c, #1b98e0); }
+        .project-banner.windrider { background: linear-gradient(135deg, #2c3e7a, #d9a441); }
+        .project-banner.mdpeek { background: linear-gradient(135deg, #1f6f43, #2ea043); }
+        .badge-team { background: rgba(143, 198, 239, 0.18); color: #8fc6ef; margin-left: 6px; }
 
         .project-card-wrap {
             background: rgba(255, 255, 255, 0.04);
@@ -267,6 +270,40 @@
                 </div>
             </div>
             <div class="col-md-6">
+                <div class="project-card-wrap">
+                    <a href="projects/wind-rider.html" class="project-card">
+                        <div class="project-banner windrider">🪽</div>
+                        <div class="project-body">
+                            <span class="badge-status badge-progress">Ongoing</span><span class="badge-status badge-team">Team of 6</span>
+                            <h3 class="fw-bold mt-3">Wind Rider</h3>
+                            <p style="color: rgba(255,255,255,0.7);">A browser flying game across nine floating worlds: race friends live, chase ghosts in time trials, or take a roguelike adventure through portals. Started with five teammates at the VIScon Hackathon 2026, and still growing.</p>
+                        </div>
+                    </a>
+                    <div class="card-links">
+                        <a href="projects/wind-rider.html" class="card-link">Project page →</a>
+                        <a href="projects/wind-rider.html#trailer" class="card-link">▶ Trailer</a>
+                        <a href="https://github.com/Nengeldir/ItWorksOnMyMachine" class="card-link" target="_blank" rel="noopener">&lt;/&gt; Source code</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="project-card-wrap">
+                    <a href="projects/markdown-preview.html" class="project-card">
+                        <div class="project-banner mdpeek">📝</div>
+                        <div class="project-body">
+                            <span class="badge-status badge-live">Available now</span>
+                            <h3 class="fw-bold mt-3">Markdown Peek</h3>
+                            <p style="color: rgba(255,255,255,0.7);">Press Space on a Markdown file in Finder and read it rendered, then press ⌘E to edit it without leaving Quick Look. Native macOS, Apple frameworks only, with a Markdown renderer written from scratch.</p>
+                        </div>
+                    </a>
+                    <div class="card-links">
+                        <a href="projects/markdown-preview.html" class="card-link">Project page →</a>
+                        <a href="https://github.com/WpyGG4125/WpyGG4125.github.io/tree/main/source/markdown-preview" class="card-link" target="_blank" rel="noopener">&lt;/&gt; Source code</a>
+                        <a href="projects/markdown-preview.html#downloads" class="card-link">⬇ Download</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
                 <div class="more-soon">
                     <div class="fs-1 mb-2">✨</div>
                     <div>More projects coming soon.</div>
@@ -275,10 +312,11 @@
         </div>
 
         <div class="source-note mt-5">
-            <strong>Every project above is open.</strong> The complete source code for all four lives in
-            <a href="https://github.com/WpyGG4125/WpyGG4125.github.io/tree/main/source" target="_blank" rel="noopener">this site's own repository, 
-            under <code>source/</code></a>: nothing is a screenshot of something you cannot read. I architect and direct these
-            projects and review every line; Claude assists with implementation. Each project page
+            <strong>Every project above is open.</strong> The source code of my own projects lives in
+            <a href="https://github.com/WpyGG4125/WpyGG4125.github.io/tree/main/source" target="_blank" rel="noopener">this site's own repository,
+            under <code>source/</code></a>: nothing is a screenshot of something you cannot read. Wind Rider is the exception, since it
+            belongs to a team of six; its code is in <a href="https://github.com/Nengeldir/ItWorksOnMyMachine" target="_blank" rel="noopener">the team's repository</a>.
+            I architect and direct my solo projects and review every line; Claude assists with implementation. Each project page
             says exactly how that division of labour worked.
         </div>
     </div>

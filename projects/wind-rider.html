@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wind Rider - Pengyue Wang</title>
+    <meta name="description" content="Wind Rider: a browser flying game across nine hand-tuned procedural worlds, with races against friends, ghost time trials and a roguelike adventure. An ongoing team project by six people, started at the VIScon Hackathon 2026.">
+    <link href="../bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico?">
+    <script src="../bootstrap.bundle.min.js"></script>
+    <style>
+        :root {
+            --wr-1: #2c3e7a;
+            --wr-2: #d9a441;
+            --wr-3: #f6dca6;
+            --wr-sky: #8fc6ef;
+            --wr-glow: rgba(246, 220, 166, 0.25);
+        }
+
+        body {
+            background-color: #0a0d18;
+            color: white;
+            margin: 0;
+            overflow-x: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .navbar {
+            z-index: 1000;
+            background: rgba(10, 13, 24, 0.85);
+            font-family: "Cabin Sketch", cursive;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .navbar-brand, .nav-link { padding: 10px 15px !important; }
+
+        /* ---------- Hero ---------- */
+        #hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 140px 20px 80px;
+            background:
+                linear-gradient(180deg, rgba(10,13,24,0.55) 0%, rgba(10,13,24,0.35) 40%, #0a0d18 100%),
+                url("../resources/images/wind-rider-verdant.jpg") center / cover no-repeat;
+        }
+
+        .hero-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .app-icon {
+            font-size: 5.5rem;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 20px 40px var(--wr-glow));
+            animation: float 5s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-3deg); }
+            50% { transform: translateY(-12px) rotate(3deg); }
+        }
+
+        .eyebrow-pill {
+            display: inline-block;
+            background: rgba(217,164,65,0.16);
+            border: 1px solid rgba(246,220,166,0.45);
+            color: var(--wr-3);
+            border-radius: 999px;
+            padding: 6px 18px;
+            font-size: .8rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 22px;
+            backdrop-filter: blur(6px);
+        }
+
+        .hero-inner h1 {
+            font-weight: 800;
+            font-size: 3.6rem;
+            margin-bottom: 10px;
+            letter-spacing: .04em;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+        }
+
+        .hero-tagline {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 36px;
+            text-shadow: 0 2px 14px rgba(0,0,0,0.6);
+        }
+
+        .btn-main {
+            background: linear-gradient(135deg, #b9832a, var(--wr-2));
+            border: none;
+            color: #1a1206;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 15px 38px;
+            border-radius: 14px;
+            box-shadow: 0 14px 34px rgba(217,164,65,0.35);
+            transition: transform .25s ease, box-shadow .25s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn-main:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 42px rgba(217,164,65,0.5);
+            color: #1a1206;
+        }
+
+        .btn-ghost {
+            display: inline-block;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            font-weight: 600;
+            font-size: 1.05rem;
+            padding: 14px 30px;
+            border-radius: 14px;
+            text-decoration: none;
+            background: rgba(10,13,24,0.35);
+            backdrop-filter: blur(6px);
+            transition: all .25s ease;
+        }
+
+        .btn-ghost:hover { background: rgba(255,255,255,0.12); color: white; }
+
+        .hero-buttons { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+
+        .hero-meta {
+            margin-top: 18px;
+            color: rgba(255,255,255,0.6);
+            font-size: .9rem;
+        }
+
+        /* ---------- Sections ---------- */
+        .section-wrap { padding: 100px 0; }
+
+        .section-eyebrow {
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            font-size: .8rem;
+            color: var(--wr-2);
+            font-weight: 600;
+        }
+
+        .team-banner {
+            background: linear-gradient(135deg, rgba(44,62,122,0.45), rgba(217,164,65,0.10));
+            border: 1px solid rgba(246,220,166,0.25);
+            border-radius: 22px;
+            padding: 50px;
+            text-align: center;
+        }
+
+        .team-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 28px; }
+
+        .team-pill {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 999px;
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: .98rem;
+        }
+
+        .team-pill.me { border-color: rgba(246,220,166,0.6); color: var(--wr-3); }
+
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 26px;
+            font-size: .85rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .status-dot {
+            width: 9px; height: 9px; border-radius: 50%;
+            background: #ffc107;
+            box-shadow: 0 0 10px #ffc107;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse { 50% { opacity: .35; } }
+
+        /* ---------- Video ---------- */
+        .video-frame {
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 60px rgba(143,198,239,0.08);
+            background: black;
+        }
+
+        .video-frame video { width: 100%; display: block; }
+
+        /* ---------- Modes ---------- */
+        .mode-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 18px;
+            padding: 30px;
+            height: 100%;
+        }
+
+        .mode-card .mode-icon { font-size: 2.2rem; display: block; margin-bottom: 12px; }
+        .mode-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 10px; }
+        .mode-card p { color: rgba(255,255,255,0.65); font-size: .95rem; margin-bottom: 0; }
+
+        /* ---------- Gallery ---------- */
+        .gallery-item {
+            overflow: hidden;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.02);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            border-color: rgba(246, 220, 166, 0.45);
+            box-shadow: 0 12px 30px rgba(217, 164, 65, 0.15);
+        }
+
+        .gallery-img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            display: block;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-img:hover { transform: scale(1.03); }
+
+        .gallery-caption {
+            padding: 10px 14px;
+            font-size: .85rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .custom-modal-dark {
+            background-color: rgba(10, 13, 24, 0.96) !important;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        }
+
+        .custom-modal-dark .modal-header { border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+
+        /* ---------- Features ---------- */
+        .feature-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 28px;
+            height: 100%;
+            transition: all .3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(246,220,166,0.4);
+            transform: translateY(-6px);
+            background: rgba(217,164,65,0.06);
+        }
+
+        .feature-icon { font-size: 2.2rem; margin-bottom: 14px; display: block; }
+        .feature-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 8px; }
+        .feature-desc { color: rgba(255,255,255,0.6); font-size: .92rem; }
+
+        /* ---------- Tech table ---------- */
+        .req-table {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 10px 30px;
+        }
+
+        .req-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .req-row:last-child { border-bottom: none; }
+        .req-key { color: rgba(255,255,255,0.5); }
+        .req-val { font-weight: 600; text-align: right; max-width: 62ch; }
+
+        /* ---------- Source / collaboration ---------- */
+        .source-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 18px;
+            padding: 34px;
+            height: 100%;
+        }
+
+        .source-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
+        .source-card p { color: rgba(255,255,255,0.65); font-size: .95rem; }
+
+        .role-list { list-style: none; padding-left: 0; margin: 0; }
+        .role-list li {
+            padding: 9px 0 9px 26px;
+            position: relative;
+            color: rgba(255,255,255,0.72);
+            font-size: .95rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .role-list li:last-child { border-bottom: none; }
+        .role-list li::before {
+            content: "▸";
+            position: absolute;
+            left: 4px;
+            color: var(--wr-2);
+        }
+
+        .btn-dl-sm {
+            display: inline-block;
+            border-radius: 10px;
+            padding: 10px 18px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: .92rem;
+            transition: all .25s ease;
+        }
+
+        .btn-dl-sm.primary { background: linear-gradient(135deg, var(--wr-1), #4a68b8); }
+        .btn-dl-sm.primary:hover { filter: brightness(1.15); color: white; }
+
+        .honesty-note {
+            border-left: 3px solid var(--wr-2);
+            padding: 18px 24px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 0 14px 14px 0;
+            color: rgba(255,255,255,0.75);
+            font-size: .95rem;
+        }
+
+        code {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 7px;
+            border-radius: 5px;
+            color: var(--wr-3);
+            font-size: .88em;
+        }
+
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            color: rgba(255,255,255,0.4);
+            font-size: .85rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        footer a { color: rgba(255,255,255,0.6); }
+
+        @media (max-width: 576px) {
+            .hero-inner h1 { font-size: 2.4rem; }
+            .team-banner { padding: 32px 22px; }
+            .req-val { text-align: left; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">Pengyue Wang / 王鹏越</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item fs-2 px-2"><a class="nav-link" href="../index.html#about">About</a></li>
+                    <li class="nav-item fs-2 px-2"><a class="nav-link" href="../projects.html">Projects</a></li>
+                    <li class="nav-item fs-2 px-2"><a class="nav-link" href="../index.html#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section id="hero">
+        <div class="hero-inner">
+            <div class="app-icon">🪽</div>
+            <div class="eyebrow-pill">Team project · ongoing</div>
+            <h1>Wind Rider</h1>
+            <p class="hero-tagline">A flying game for the browser. Put on a pair of wings, dive through crystal gates and
+                skim the rocks across nine floating worlds, alone, against your own ghost, or in a room
+                with up to twelve friends.</p>
+
+            <div class="hero-buttons">
+                <a href="#trailer" class="btn-main">▶ Watch the trailer</a>
+                <a href="https://github.com/Nengeldir/ItWorksOnMyMachine" class="btn-ghost" target="_blank" rel="noopener">&lt;/&gt; Source on GitHub</a>
+            </div>
+            <div class="hero-meta">Started at the VIScon Hackathon 2026, ETH Zürich &nbsp;·&nbsp; React · Three.js · FastAPI</div>
+        </div>
+    </section>
+
+    <section class="section-wrap">
+        <div class="container">
+            <div class="team-banner">
+                <div class="section-eyebrow mb-2">Who made it</div>
+                <h2 class="fw-bold mb-3">Six people, one game.</h2>
+                <p class="lead mb-0" style="color: rgba(255,255,255,0.78); max-width: 760px; margin: 0 auto;">
+                    Wind Rider isn't a solo project. Six of us started it over a weekend at the VIScon
+                    hackathon under the team name <i>It Works On My Machine</i>, with one rule we kept
+                    repeating to each other: it should look and feel like gliding in <i>Sky: Children of
+                    the Light</i> or <i>Genshin Impact</i>, but play like a racer. The hackathon is over and we
+                    are still working on it.
+                </p>
+                <div class="team-row">
+                    <span class="team-pill">Claudia Gubler</span>
+                    <span class="team-pill">Félix Ludwig</span>
+                    <span class="team-pill">Luca Conconi</span>
+                    <span class="team-pill me">Pengyue Wang</span>
+                    <span class="team-pill">Shiyu Xiao</span>
+                    <span class="team-pill">Timo Zünd</span>
+                </div>
+                <div class="status-chip"><span class="status-dot"></span> In development, not publicly hosted yet</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap pt-0" id="trailer">
+        <div class="container">
+            <div class="section-eyebrow mb-2">The presentation video</div>
+            <h2 class="display-5 fw-bold mb-4">Two minutes in the air</h2>
+            <div class="video-frame">
+                <video controls preload="metadata" playsinline poster="wind-rider/poster.jpg">
+                    <source src="wind-rider/wind-rider-presentation.mp4" type="video/mp4">
+                    Your browser can't play this video. <a href="wind-rider/wind-rider-presentation.mp4">Download it instead.</a>
+                </video>
+            </div>
+            <p class="mt-3 mb-0" style="color: rgba(255,255,255,0.5); font-size: .9rem;">
+                Everything in the video is captured from the game running in a browser, no pre-rendered shots.
+            </p>
+        </div>
+    </section>
+
+    <section class="section-wrap" style="background: rgba(255,255,255,0.015);">
+        <div class="container">
+            <div class="section-eyebrow mb-2">Three ways to fly</div>
+            <h2 class="display-5 fw-bold mb-3">Pick a mode</h2>
+            <p class="lead mb-5" style="color: rgba(255,255,255,0.7); max-width: 760px;">
+                Every course comes from a seed. The same seed gives everyone the same islands, tunnels
+                and gates, which is what makes racing, ghosts and shared leaderboards possible.
+            </p>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="mode-card">
+                        <span class="mode-icon">🏁</span>
+                        <h3>Race friends</h3>
+                        <p>Create a room, send the code, and everyone flies the same map at the same time. You
+                            see the other pilots live, with their capes and trails, and the lobby can switch
+                            maps between races.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mode-card">
+                        <span class="mode-icon">⏱️</span>
+                        <h3>Time trial</h3>
+                        <p>Fly today's course, or any of the nine maps, against the clock and the ghosts of
+                            the fastest runs. Each seed keeps its own leaderboard.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mode-card">
+                        <span class="mode-icon">🌀</span>
+                        <h3>Adventure</h3>
+                        <p>A roguelike run through eight different worlds joined by portals. At every portal
+                            you choose one of three upgrades, so no two runs fly the same. Three feathers,
+                            and a crash costs one.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap pb-2">
+        <div class="container">
+            <div class="section-eyebrow mb-2">Screenshots</div>
+            <h2 class="display-5 fw-bold mb-4">Some of the worlds</h2>
+            <div class="row g-4">
+                <div class="col-md-6 col-12">
+                    <div class="gallery-item">
+                        <img src="../resources/images/wind-rider-reef.jpg" alt="Sunken Reef: flying through a gate under the sea" class="gallery-img" loading="lazy" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <div class="gallery-caption">Sunken Reef, the one world under water</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="gallery-item">
+                        <img src="../resources/images/wind-rider-verdant.jpg" alt="Verdant Highlands: a windmill above the river" class="gallery-img" loading="lazy" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <div class="gallery-caption">Verdant Highlands in the morning</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12">
+                    <div class="gallery-item">
+                        <img src="../resources/images/wind-rider-maps.jpg" alt="The map select with all nine worlds" class="gallery-img" loading="lazy" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <div class="gallery-caption">The map select, one card per world</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12">
+                    <div class="gallery-item">
+                        <img src="../resources/images/wind-rider-butterfly.jpg" alt="The butterfly gliding stance at night" class="gallery-img" loading="lazy" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <div class="gallery-caption">Butterfly stance, one of twenty abilities</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12">
+                    <div class="gallery-item">
+                        <img src="../resources/images/wind-rider-companion.jpg" alt="Coral Lagoon with a pet companion" class="gallery-img" loading="lazy" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <div class="gallery-caption">Coral Lagoon, with a companion along</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12">
+                    <div class="gallery-item">
+                        <img src="../resources/images/wind-rider-lagoon.jpg" alt="A lighthouse on a sea stack at night" class="gallery-img" loading="lazy" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <div class="gallery-caption">A lighthouse on a sea stack</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12">
+                    <div class="gallery-item">
+                        <img src="../resources/images/wind-rider-twilight.jpg" alt="Twilight Forest at night, with giant mushrooms and a glowing stream" class="gallery-img" loading="lazy" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <div class="gallery-caption">Twilight Forest after dark</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12">
+                    <div class="gallery-item">
+                        <img src="../resources/images/wind-rider-glacier.jpg" alt="Glacier Peaks under the aurora" class="gallery-img" loading="lazy" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <div class="gallery-caption">Glacier Peaks under the aurora</div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="gallery-item">
+                        <img src="../resources/images/wind-rider-eth.jpg" alt="The ETH main building, hidden as an Easter egg on a hillside" class="gallery-img" loading="lazy" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <div class="gallery-caption">An Easter egg: the ETH main building, on a few rare Verdant seeds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap">
+        <div class="container">
+            <div class="section-eyebrow mb-2">What's in it</div>
+            <h2 class="display-5 fw-bold mb-5">More than a weekend's worth</h2>
+
+            <div class="row g-4">
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">🌍</span>
+                        <div class="feature-title">Nine worlds</div>
+                        <div class="feature-desc">Sky Isles, Verdant Highlands, Glacier Peaks, Sky Archipelago, Coral Lagoon, Twilight Forest, Ember Wastes, Aurora Summit and the Sunken Reef. Each has its own landforms, plants, buildings, music, and a day and a night mood.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">🪶</span>
+                        <div class="feature-title">A flight model that rewards nerve</div>
+                        <div class="feature-desc">The nose points where you go and gravity trades height for speed. Diving makes you fast, and skimming close to rock earns style points and a boost. On top of that you get a held boost, an air brake and a quick sideways dodge.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">✨</span>
+                        <div class="feature-title">Twenty abilities, twenty items</div>
+                        <div class="feature-desc">For the adventure: a spirit manta to draft behind, a wind tunnel that widens the gates ahead, a song that turns gates to face you, falcon and butterfly stances, a firework strapped to your back, and plenty more.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">🎒</span>
+                        <div class="feature-title">Your pilot, your look</div>
+                        <div class="feature-desc">Crystals and treasures you collect on runs level up a profile and unlock capes, hats, boots, decorated wings and eight pets that follow you through the gates.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">👻</span>
+                        <div class="feature-title">Ghosts and leaderboards</div>
+                        <div class="feature-desc">Finished runs are recorded at 15 Hz and stored with their time, so you race the translucent ghosts of the best pilots on the same seed.</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="feature-card">
+                        <span class="feature-icon">📱</span>
+                        <div class="feature-title">Keyboard, gamepad or phone</div>
+                        <div class="feature-desc">Mouse and keyboard with rebindable keys, a gamepad, or touch: on a phone held sideways, a stick appears under your thumb, with buttons for boost, brake and abilities. New players get a short tutorial flight if they want one.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap" style="background: rgba(255,255,255,0.015);">
+        <div class="container">
+            <div class="section-eyebrow mb-2">Under the hood</div>
+            <h2 class="display-5 fw-bold mb-4">How it's built</h2>
+            <div class="req-table">
+                <div class="req-row"><span class="req-key">Frontend</span><span class="req-val">React 19, TypeScript and Vite; the game itself is plain Three.js, outside React</span></div>
+                <div class="req-row"><span class="req-key">Look</span><span class="req-val">Cel-shaded toon materials with ink outlines, HDR bloom, a painted sky shader, one GPU particle system for every effect</span></div>
+                <div class="req-row"><span class="req-key">Terrain</span><span class="req-val">Signed distance fields meshed with surface nets in Web Workers, streamed in an LOD octree, land fading in out of the haze</span></div>
+                <div class="req-row"><span class="req-key">Collisions</span><span class="req-val">A body sphere and two wing rectangles tested against the exact triangles on screen, so what you hit is what you see</span></div>
+                <div class="req-row"><span class="req-key">Simulation</span><span class="req-val">Fixed 120 Hz physics steps, rendering interpolated between them; every course deterministic from its seed</span></div>
+                <div class="req-row"><span class="req-key">Multiplayer</span><span class="req-val">FastAPI rooms relaying pilot positions over Server-Sent Events at 15 Hz</span></div>
+                <div class="req-row"><span class="req-key">Persistence</span><span class="req-val">SQLite for leaderboards, ghosts and adventure profiles; server-checked finish times</span></div>
+                <div class="req-row"><span class="req-key">Deployment</span><span class="req-val">Docker Compose, with Caddy serving the build and proxying the API</span></div>
+                <div class="req-row"><span class="req-key">Performance target</span><span class="req-val">60 fps on an integrated laptop GPU at High quality, with automatic quality steps below that</span></div>
+            </div>
+
+            <div class="honesty-note mt-5">
+                It isn't online for the public yet. The game runs fully in the browser, but rooms, profiles
+                and leaderboards need the backend, so for now it is played locally or on the hackathon VM.
+                Putting it up for everyone is one of the next things on our list.
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap">
+        <div class="container">
+            <div class="section-eyebrow mb-2">Source &amp; process</div>
+            <h2 class="display-5 fw-bold mb-4">How we work on it</h2>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="source-card">
+                        <h3>&lt;/&gt; Read the source</h3>
+                        <p>
+                            The game lives in the team repository, not in this site's <code>source/</code>
+                            folder like my solo projects, since it belongs to all six of us. Run it locally
+                            with a single <code>docker compose up --build</code> and open
+                            <code>localhost:8080</code>.
+                        </p>
+                        <p class="mb-4">
+                            <code>frontend/</code> · <code>backend/</code> · <code>docs/</code>
+                        </p>
+                        <a href="https://github.com/Nengeldir/ItWorksOnMyMachine" class="btn-dl-sm primary" target="_blank" rel="noopener">Team repository on GitHub →</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="source-card">
+                        <h3>🤝 Six people, one codebase</h3>
+                        <p>
+                            Six people changing one game at the same time breaks things fast, so we kept a few habits:
+                        </p>
+                        <ul class="role-list">
+                            <li>Changes come in as pull requests onto <code>main</code>, rebased rather than merged, so the history stays readable.</li>
+                            <li>The race map is frozen and checked by hashes, so leaderboards and ghosts never break when someone else's work lands.</li>
+                            <li>Looks never change gameplay. Visual work can't touch the flight model, collisions or timing.</li>
+                            <li>A shared design document describes the art direction, the architecture and a dated log of every change, so anyone can pick up where someone else stopped.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <a href="../projects.html">← Back to all projects</a>
+        <div class="mt-2">&copy; <span id="year"></span> Pengyue Wang. Wind Rider &copy; its six authors.</div>
+    </footer>
+
+    <div class="modal fade" id="galleryModal" tabindex="-1" aria-labelledby="galleryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content custom-modal-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title text-white" id="galleryModalLabel">Screenshot</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-2 text-center">
+                    <img src="" id="modalTargetImage" class="img-fluid rounded shadow" alt="Enlarged screenshot">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        const galleryModal = document.getElementById('galleryModal');
+        galleryModal.addEventListener('show.bs.modal', function (event) {
+            const img = event.relatedTarget;
+            galleryModal.querySelector('#modalTargetImage').src = img.getAttribute('src');
+            galleryModal.querySelector('#galleryModalLabel').textContent = img.getAttribute('alt') || 'Screenshot';
+        });
+    </script>
+</body>
+</html>
